@@ -1,3 +1,9 @@
+# PYTHON
+# =========================
+*.pyc
+settings.py
+*.json
+
 *.class
 
 # Mobile Tools for Java (J2ME)
