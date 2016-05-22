@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>Teoria de la Computacíon</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -28,17 +28,33 @@
         left: 0;
         top: 0;
       }
+
+      .list {
+        padding-top: 35px;
+      }
+
+      .list .btn{
+        display:block;
+        margin: 10px auto 10px auto;
+        padding:15px 0 15px 0;
+      }
+
     </style>
   </head>
   <body>
-    <h1>DFA</h1>
-    <div id="cy"></div>
+    
+    <div class="container">
+    <h1 align="center">Teoria de la Computación</h1>
+      <div class="list">
+        <a class="btn btn-default" href="DFA.html" role="button">Deterministic Finite Automata</a>
+        <a class="btn btn-default" href="DFA.html" role="button">Non-Deterministic Finite Automata</a>
+        <a class="btn btn-default" href="DFA.html" role="button">Regular Expressions</a>
+      </div>
+    </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
-    <script src="cytoscape.js-2.6.12/cytoscape.min.js"></script>
-    <script src="js/testGraph.js"></script>
   </body>
 </html>
