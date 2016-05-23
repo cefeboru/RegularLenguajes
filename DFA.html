@@ -16,24 +16,6 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <style>
-      body { 
-        font: 14px helvetica neue, helvetica, arial, sans-serif;
-      }
-
-      #cy {
-        /* height: 100%;
-        width: 100%; */
-        position: absolute;
-        left: 0;
-        top: 0;
-      }
-
-      .dfaCanvas {
-        display: none;
-      }
-
-    </style>
   </head>
   <body>
     
@@ -54,7 +36,7 @@
       <div class="form-group">
         <label>Q<sub>0</sub></label><input class="form-control" type="text">  
       </div>
-      <button class="btn btn-default" type="submit" onclick="dibujarDFA();">Button</button>
+      <button class="btn btn-default" type="submit" onclick="submitData();">Button</button>
     </div>
 
 
@@ -70,10 +52,106 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
     <script>
-      function dibujarDFA() {
+
+      var Q = ["q1","q2","q3"];
+      var Sigma = ["a","b"];
+      var q0 = "q1";
+      var F = ["q3"];
+      var transiciones = [];
+      transiciones.push({ origen:"q1" , destino:"q2" , simbolo:"a" });
+      transiciones.push({ origen:"q1" , destino:"q3" , simbolo:"b" });
+      transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"a" });
+      transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"b" });
+      transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"a" });
+      transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });
+
+      function submitData() {
         document.getElementsByClassName("formulario")[0].style = "display:none;"
-        document.getElementsByClassName("dfaCanvas")[0].style = "display:block;"
+        //TODO GUARDAR LA DATA EN ARREGLOS
+        //EJEMPLO
+        /* INICIO CREAR DATA 
+        *Crear la de la siguiente forma
+         var Q = ["q1","q2","q3"];
+         var Sigma = ["a","b"];
+         var q0 = "q1";
+         var F = ["q3"];
+         var transiciones = [];
+         transiciones.push({ origen:"q1" , destino:"q2" , simbolo:"a" });
+         transiciones.push({ origen:"q1" , destino:"q3" , simbolo:"b" });
+         transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"a" });
+         transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"b" });
+         transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"a" });
+         transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });
+        *FIN CREAR DATA */
+        dibujarDFA();
       }
+
+
+      var cy;//Cytoscape CORE
+
+     function dibujarDFA() {
+       //INICIALIZACIÓN DE CYTOSCAPE
+       cy = cytoscape({
+         container: document.getElementById('cy'),
+         
+         boxSelectionEnabled: false,
+         autounselectify: true,
+         
+         style: [
+           {
+             selector: 'node',
+             css: {
+               'content': 'data(id)',
+               'text-valign': 'center',
+               'text-halign': 'center'
+             }
+           },
+           {
+             selector: '$node > node',
+             css: {
+               'padding-top': '10px',
+               'padding-left': '10px',
+               'padding-bottom': '10px',
+               'padding-right': '10px',
+               'text-valign': 'top',
+               'text-halign': 'center',
+               'background-color': '#bbb'
+             }
+           },
+           {
+             selector: 'edge',
+             css: {
+               'target-arrow-shape': 'triangle'
+             },
+             style: {
+               'label': 'data(label)',
+               'width': 3,
+               'line-color': '#ccc'
+             }
+           },
+           {
+             selector: ':selected',
+             css: {
+               'background-color': 'black',
+               'line-color': 'black',
+               'target-arrow-color': 'black',
+               'source-arrow-color': 'black'
+             }
+           }
+         ],          
+        layout: {
+           name: 'preset',
+           padding: 5
+        }
+      });
+      
+      //CREACIÓN DE NODOS
+      for (var i = Q.length - 1; i >= 0; i--) {
+        Q[i]
+      };
+      //CREACIÓN DE TRANSICIONES
+     }
+
     </script>
   </body>
 </html>

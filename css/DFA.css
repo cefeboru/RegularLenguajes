@@ -1,0 +1,15 @@
+body { 
+  font: 14px helvetica neue, helvetica, arial, sans-serif;
+}
+
+#cy {
+  height: 300px;
+  width: 300px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.dfaCanvas {
+  display: none;
+}
