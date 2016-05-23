@@ -1,5 +1,4 @@
-# RegularLenguajes
-Teoria de la Computación
+# Teoria de la Computación
 <p>TODO LIST</p>
   <p>DFA:<ul>
   <li>Complete DFA FORM</li>
