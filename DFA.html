@@ -7,6 +7,8 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Teoria de la Computacíon</title>
 
+    <!-- Main CSS -->
+    <link href="css/DFA.css" rel="stylesheet">
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
@@ -51,6 +53,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/cytoscape.min.js"></script>
     <script>
 
       var Q = ["q1","q2","q3"];
@@ -107,26 +110,19 @@
              }
            },
            {
-             selector: '$node > node',
+             selector: '.root',
              css: {
-               'padding-top': '10px',
-               'padding-left': '10px',
-               'padding-bottom': '10px',
-               'padding-right': '10px',
-               'text-valign': 'top',
-               'text-halign': 'center',
-               'background-color': '#bbb'
+               'content': 'data(id)',
+               'background-color': '#FFFF00'
              }
            },
            {
              selector: 'edge',
              css: {
-               'target-arrow-shape': 'triangle'
-             },
-             style: {
                'label': 'data(label)',
                'width': 3,
-               'line-color': '#ccc'
+               'line-color': '#ccc',
+               'target-arrow-shape': 'triangle'
              }
            },
            {
@@ -145,11 +141,51 @@
         }
       });
       
+      //NODO Q0
+      cy.add([
+        { group: "nodes", data: { id: q0 }, position: {x: 145, y: 50}, classes: 'root' }
+      ]);
+
       //CREACIÓN DE NODOS
+      var temp = [];
       for (var i = Q.length - 1; i >= 0; i--) {
-        Q[i]
+        if(Q[i] !== q0) {
+          cy.add([
+            {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 } }
+          ]);
+        }
       };
+
+      for (var i = Q.length - 1; i >= 0; i--) {
+        var currentNode = Q[i];
+        for (var j = transiciones.length - 1; j >= 0; j--) {
+          var temp = [];
+          var transicion = transiciones[i];
+          if(currentNode === transicion.origen ){
+
+          }
+        };
+      };
+
+
+      for (var i = transiciones.length - 1; i >= 0; i--) {
+        var transicion = transiciones[i];
+
+        var newEdgeId = transicion.origen.concat("-").concat(transicion.destino);
+
+        var tSource = transicion.origen;
+        var tTarget = transicion.destino;
+        var sigmaSymbol = transicion.simbolo;
+
+        cy.add([
+          {group: "edges", data: { id: newEdgeId , source: tSource, target: tTarget, label: sigmaSymbol}}
+        ]);
+      };
+
       //CREACIÓN DE TRANSICIONES
+        //TODO
+      //MOSTRAR DFA
+      document.getElementsByClassName("dfaCanvas")[0].style = "display: block;"
      }
 
     </script>
