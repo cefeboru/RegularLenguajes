@@ -155,20 +155,43 @@
           ]);
         }
       };
+      
+      //CREACIÓN DE TRANSICIONES
+      for (var i = transiciones.length - 1; i >= 0; i--) {
+        var transicionActual = transiciones[i];
 
-      for (var i = Q.length - 1; i >= 0; i--) {
-        var currentNode = Q[i];
-        for (var j = transiciones.length - 1; j >= 0; j--) {
-          var temp = [];
-          var transicion = transiciones[i];
-          if(currentNode === transicion.origen ){
+        //BUSCAR SI HAY TRANSICIONES IGUALES CON DIFERENTES SIMBOLOS
+        for (var j = transiciones.length - 1; j > i; j--) {
+          var transicionBusqueda = transiciones[j];
 
+          //SI ESTA DUPLICADO UNIR EL LABEL. EJEMPLO: a,b
+          if( isDuplicated(transicionActual, transicionBusqueda) ) {
+            var EdgeId = transicionActual.origen.concat("-").concat(transicionActual.destino);
+            var alphabetSymbol = transicionActual.simbolo.concat(",").concat(transicionBusqueda.simbolo);
+            cy.add([ 
+              { 
+                group: "edges", 
+                data: { 
+                  id: EdgeId, source: transicionActual.origen, target: transicionActual.destino, label: alphabetSymbol
+                }
+              }]);
+            transiciones[j].noDuplicado = false;
+          } else if (! transiciones[i].duplicado ){
+            var EdgeId = transicionActual.origen.concat("-").concat(transicionActual.destino);
+            var alphabetSymbol = transicionActual.simbolo;
+            cy.add([ 
+              { 
+                group: "edges", 
+                data: { 
+                  id: EdgeId, source: transicionActual.origen, target: transicionActual.destino, label: alphabetSymbol
+                }
+              }]);
           }
         };
-      };
+      }
 
-
-      for (var i = transiciones.length - 1; i >= 0; i--) {
+      
+      /*for (var i = transiciones.length - 1; i >= 0; i--) {
         var transicion = transiciones[i];
 
         var newEdgeId = transicion.origen.concat("-").concat(transicion.destino);
@@ -180,14 +203,21 @@
         cy.add([
           {group: "edges", data: { id: newEdgeId , source: tSource, target: tTarget, label: sigmaSymbol}}
         ]);
-      };
+      };*/
 
-      //CREACIÓN DE TRANSICIONES
+
         //TODO
       //MOSTRAR DFA
       document.getElementsByClassName("dfaCanvas")[0].style = "display: block;"
      }
 
+     function isDuplicated(transicion1, transicion2) {
+      var booleanVariable = transicion1.origen === transicion2.origen 
+        && transicion1.destino === transicion2.destino 
+        && transicion1.simbolo !== transicion2.simbolo;
+        return booleanVariable;
+
+     }
     </script>
   </body>
 </html>
