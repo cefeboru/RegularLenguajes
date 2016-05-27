@@ -4,12 +4,39 @@ body {
 
 #cy {
   height: 300px;
-  width: 300px;
+  width: 100%;
   border-style: solid;
   border-width: 1px;
-  margin: 15px auto 15px auto;
+  
 }
 
 .dfaCanvas {
   display: none;
+  width: 60%;
+  margin: 15px auto 15px auto;
+}
+
+.labelsContainer {
+	padding-top: 15px;
+}
+
+.labelsContainer span {
+	margin-right: 15px;
+}
+
+.dfaLabel {
+	display: inline-block;
+	width: 15px;
+	height: 10px;
+	margin-right: 5px;
+}
+
+
+
+.rootNodeLabel {
+	background-color: #FFFF00;
+}
+
+.finalNodeLabel {
+	background-color: #DC143C;	
 }

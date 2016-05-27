@@ -24,7 +24,15 @@
     <div class="container">
     <div class="header">
       <h1 align="center">Deterministic Finite Automata</h1>
-      <p>*Descripcion de DFA*</p>
+      <p>Un <strong>autómata finito determinista</strong> (abreviado DFA por sus siglas en inglés) es un autómata finito que además es un sistema determinista; es decir, para cada estado en que se encuentre el autómata, y con cualquier símbolo del alfabeto leído, existe siempre a lo más una transición posible desde ese estado y con ese símbolo.</p>
+      <h2>Definición formal</h2>
+      <p>Formalmente, se define como una 5-tupla (<i>Q</i>, Σ, <i>q<sub>0</sub></i>, δ, <i>F</i>) donde:</p>
+      <ul>
+        <li><strong>Q</strong> es un conjunto de estados;</li>
+        <li><strong>&Sigma;</strong> es un alfabeto;</li>
+        <li>q<sub>0</sub> &isin; <strong>Q</strong>;</li>
+        <li>&delta;: Q X &Sigma; &rarr; Q es una función de transición;</li>
+      </ul>
     </div>
 
 
@@ -36,15 +44,18 @@
         <label>&Sigma;</label><input class="form-control" type="text">  
       </div>
       <div class="form-group">
-        <label>Q<sub>0</sub></label><input class="form-control" type="text">  
+        <label>q<sub>0</sub></label><input class="form-control" type="text">  
       </div>
-      <button class="btn btn-default" type="submit" onclick="submitData();">Button</button>
+      <button class="btn btn-default" type="submit" onclick="submitData();">Dibujar DFA</button>
     </div>
 
 
     <div class="dfaCanvas">
-      DFA
       <div id="cy"></div>
+      <div class="labelsContainer">
+        <div class="dfaLabel rootNodeLabel"></div><span>Estado Inicial</span>
+        <div class="dfaLabel finalNodeLabel"></div><span>Estado Final</span>
+      </div>
     </div>
     </div>
 
@@ -54,170 +65,6 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/cytoscape.min.js"></script>
-    <script>
-
-      var Q = ["q1","q2","q3"];
-      var Sigma = ["a","b"];
-      var q0 = "q1";
-      var F = ["q3"];
-      var transiciones = [];
-      transiciones.push({ origen:"q1" , destino:"q2" , simbolo:"a" });
-      transiciones.push({ origen:"q1" , destino:"q3" , simbolo:"b" });
-      transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"a" });
-      transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"b" });
-      transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"a" });
-      transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });
-
-      function submitData() {
-        document.getElementsByClassName("formulario")[0].style = "display:none;"
-        //TODO GUARDAR LA DATA EN ARREGLOS
-        //EJEMPLO
-        /* INICIO CREAR DATA 
-        *Crear la de la siguiente forma
-         var Q = ["q1","q2","q3"];
-         var Sigma = ["a","b"];
-         var q0 = "q1";
-         var F = ["q3"];
-         var transiciones = [];
-         transiciones.push({ origen:"q1" , destino:"q2" , simbolo:"a" });
-         transiciones.push({ origen:"q1" , destino:"q3" , simbolo:"b" });
-         transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"a" });
-         transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"b" });
-         transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"a" });
-         transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });
-        *FIN CREAR DATA */
-        dibujarDFA();
-      }
-
-
-      var cy;//Cytoscape CORE
-
-     function dibujarDFA() {
-       //INICIALIZACIÓN DE CYTOSCAPE
-       cy = cytoscape({
-         container: document.getElementById('cy'),
-         
-         boxSelectionEnabled: false,
-         autounselectify: true,
-         
-         style: [
-           {
-             selector: 'node',
-             css: {
-               'content': 'data(id)',
-               'text-valign': 'center',
-               'text-halign': 'center'
-             }
-           },
-           {
-             selector: '.root',
-             css: {
-               'content': 'data(id)',
-               'background-color': '#FFFF00'
-             }
-           },
-           {
-             selector: 'edge',
-             css: {
-               'label': 'data(label)',
-               'width': 3,
-               'line-color': '#ccc',
-               'target-arrow-shape': 'triangle'
-             }
-           },
-           {
-             selector: ':selected',
-             css: {
-               'background-color': 'black',
-               'line-color': 'black',
-               'target-arrow-color': 'black',
-               'source-arrow-color': 'black'
-             }
-           }
-         ],          
-        layout: {
-           name: 'preset',
-           padding: 5
-        }
-      });
-      
-      //NODO Q0
-      cy.add([
-        { group: "nodes", data: { id: q0 }, position: {x: 145, y: 50}, classes: 'root' }
-      ]);
-
-      //CREACIÓN DE NODOS
-      var temp = [];
-      for (var i = Q.length - 1; i >= 0; i--) {
-        if(Q[i] !== q0) {
-          cy.add([
-            {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 } }
-          ]);
-        }
-      };
-      
-      //CREACIÓN DE TRANSICIONES
-      for (var i = transiciones.length - 1; i >= 0; i--) {
-        var transicionActual = transiciones[i];
-
-        //BUSCAR SI HAY TRANSICIONES IGUALES CON DIFERENTES SIMBOLOS
-        for (var j = transiciones.length - 1; j > i; j--) {
-          var transicionBusqueda = transiciones[j];
-
-          //SI ESTA DUPLICADO UNIR EL LABEL. EJEMPLO: a,b
-          if( isDuplicated(transicionActual, transicionBusqueda) ) {
-            var EdgeId = transicionActual.origen.concat("-").concat(transicionActual.destino);
-            var alphabetSymbol = transicionActual.simbolo.concat(",").concat(transicionBusqueda.simbolo);
-            cy.add([ 
-              { 
-                group: "edges", 
-                data: { 
-                  id: EdgeId, source: transicionActual.origen, target: transicionActual.destino, label: alphabetSymbol
-                }
-              }]);
-            transiciones[j].noDuplicado = false;
-          } else if (! transiciones[i].duplicado ){
-            var EdgeId = transicionActual.origen.concat("-").concat(transicionActual.destino);
-            var alphabetSymbol = transicionActual.simbolo;
-            cy.add([ 
-              { 
-                group: "edges", 
-                data: { 
-                  id: EdgeId, source: transicionActual.origen, target: transicionActual.destino, label: alphabetSymbol
-                }
-              }]);
-          }
-        };
-      }
-
-      
-      /*for (var i = transiciones.length - 1; i >= 0; i--) {
-        var transicion = transiciones[i];
-
-        var newEdgeId = transicion.origen.concat("-").concat(transicion.destino);
-
-        var tSource = transicion.origen;
-        var tTarget = transicion.destino;
-        var sigmaSymbol = transicion.simbolo;
-
-        cy.add([
-          {group: "edges", data: { id: newEdgeId , source: tSource, target: tTarget, label: sigmaSymbol}}
-        ]);
-      };*/
-
-
-        //TODO
-      //MOSTRAR DFA
-      document.getElementsByClassName("dfaCanvas")[0].style = "display: block;"
-     }
-
-     function isDuplicated(transicion1, transicion2) {
-      var booleanVariable = transicion1.origen === transicion2.origen 
-        && transicion1.destino === transicion2.destino 
-        && transicion1.simbolo !== transicion2.simbolo;
-        return booleanVariable;
-
-     }
-    </script>
+    <script src="js/DFA.js"></script>
   </body>
 </html>
