@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Teoria de la Computacíon</title>
+
+    <!-- Main CSS -->
+    <link href="css/NFA.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+    <div class="container">
+    <div class="header">
+      <h1 align="center">Deterministic Finite Automata</h1>
+      <p>Un <strong>autómata finito determinista</strong> (abreviado NFA por sus siglas en inglés) es un autómata finito que además es un sistema determinista; es decir, para cada estado en que se encuentre el autómata, y con cualquier símbolo del alfabeto leído, existe siempre a lo más una transición posible desde ese estado y con ese símbolo.</p>
+      <h2>Definición formal</h2>
+      <p>Formalmente, se define como una 5-tupla (<i>Q</i>, Σ, <i>q<sub>0</sub></i>, δ, <i>F</i>) donde:</p>
+      <ul>
+        <li><strong>Q</strong> es un conjunto de estados;</li>
+        <li><strong>&Sigma;</strong> es un alfabeto;</li>
+        <li>q<sub>0</sub> &isin; <strong>Q</strong>;</li>
+        <li>&delta;: Q X &Sigma; &rarr; Q es una función de transición;</li>
+      </ul>
+    </div>
+
+
+    <div class="formulario">
+      <div class="form-group">
+        <label>Q</label><input class="form-control" type="text">  
+      </div>
+      <div class="form-group">
+        <label>&Sigma;</label><input class="form-control" type="text">  
+      </div>
+      <div class="form-group">
+        <label>q<sub>0</sub></label><input class="form-control" type="text">  
+      </div>
+      <button class="btn btn-default" type="submit" onclick="submitData();">Dibujar NFA</button>
+    </div>
+
+
+    <div class="NFACanvas">
+      <div id="cy"></div>
+      <div class="labelsContainer">
+        <div class="NFALabel rootNodeLabel"></div><span>Estado Inicial</span>
+        <div class="NFALabel finalNodeLabel"></div><span>Estado Final</span>
+      </div>
+    </div>
+    </div>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/cytoscape.min.js"></script>
+    <script src="js/NFA.js"></script>
+  </body>
+</html>
