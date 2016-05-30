@@ -82,9 +82,17 @@
       //CREACIÓN DE NODOS
       for (var i = Q.length - 1; i >= 0; i--) {
         if(Q[i] !== q0) {
-          cy.add([
-            {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 } }
-          ]);
+          if( isFinalState(Q[i],F) ) {
+            console.log("Es estado final: " + Q[i]);
+            cy.add([
+              {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 }, classes: 'final' }
+            ]);
+          } else {
+            cy.add([
+              {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 } }
+            ]);  
+          }
+          
         }
       };
       
@@ -137,14 +145,22 @@
         var bool2 = Boolean(transicionActual.destino === transiciones[i].destino);
         var bool3 = Boolean(transicionActual.simbolo !== transiciones[i].simbolo);
         var duplicated = Boolean(bool1 && bool2 && bool3);
-        console.log("Index: "+i+" tIndex: "+index)
-        console.log(transicionActual);
-        console.log(transiciones[i]);
-        console.log("Origen: "+ bool1 +" Destino: "+bool2+" Simbolo: "+bool3+", Duplicated? :"+duplicated);
+        //console.log("Index: "+i+" tIndex: "+index)
+        //console.log(transicionActual);
+        //console.log(transiciones[i]);
+        //console.log("Origen: "+ bool1 +" Destino: "+bool2+" Simbolo: "+bool3+", Duplicated? :"+duplicated);
         if(Boolean(duplicated)) {
-          console.log("hurray");
           return {duplicated: true, duplicatedIndex: i};
         }
       };
       return {duplicated:false};
      }
+
+     function isFinalState(estado, F) {
+      for (var i = F.length - 1; i >= 0; i--) {
+        if(estado === F[i]) {
+          return true;
+        }
+      };
+      return false
+;     }
