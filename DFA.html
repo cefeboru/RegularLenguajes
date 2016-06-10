@@ -26,27 +26,38 @@
       <h1 align="center">Deterministic Finite Automata</h1>
       <p>Un <strong>autómata finito determinista</strong> (abreviado DFA por sus siglas en inglés) es un autómata finito que además es un sistema determinista; es decir, para cada estado en que se encuentre el autómata, y con cualquier símbolo del alfabeto leído, existe siempre a lo más una transición posible desde ese estado y con ese símbolo.</p>
       <h2>Definición formal</h2>
-      <p>Formalmente, se define como una 5-tupla. (<i>Q</i>, Σ, <i>q<sub>0</sub></i>, δ, <i>F</i>) donde:</p>
+      <p>Formalmente, se define como una 5-tupla (<i>Q</i>, Σ, <i>q<sub>0</sub></i>, δ, <i>F</i>) donde:</p>
       <ul>
-        <li><strong>Q</strong> es un conjunto de estados;</li>
+        <li><strong>Q</strong> es un conjunto de estados</li>
         <li><strong>&Sigma;</strong> es un alfabeto;</li>
         <li>q<sub>0</sub> &isin; <strong>Q</strong>;</li>
         <li>&delta;: Q X &Sigma; &rarr; Q es una función de transición</li>
+        <li><strong>F</strong> es un conjunto de estados Finales</li>
       </ul>
     </div>
 
 
     <div class="formulario">
       <div class="form-group">
-        <label>Q</label><input class="form-control" type="text">  
+        <label>Q (Escribir lista separada por comas, ejemplo: q1,q2,q3)</label><input class="form-control" type="text" id="iQ" onchange="validaQ()" >  
       </div>
       <div class="form-group">
-        <label>&Sigma;</label><input class="form-control" type="text">  
+        <label>&Sigma; / Escribir lista separada por comas, ejemplo: 1,2 </label><input class="form-control" type="text" id="iA">  
       </div>
       <div class="form-group">
-        <label>q<sub>0</sub></label><input class="form-control" type="text">  
+        <label>q<sub>0</sub> / Seleccionar estado inicial</label>&nbsp;
+    <select class="form-control" id="iQ0">
+    </select> 
       </div>
-      <button class="btn btn-default" type="submit" onclick="submitData();">Dibujar DFA</button>
+      <div class="form-group">
+        <label>F / Escribir lista separada por comas, ejemplo: q2,q3</label><input class="form-control" type="text" id="iFinal" onchange="validaF()">  
+      </div>
+      <div class="form-group">
+        <label><strong>&delta;</strong> / Escribir lista de 3 tuplas (Origen:Simbolo:Destino) separadas por comas, ejemplo: (q1:0:q2),(q1:1:q1),(q1:0:q2) </label>
+        <input class="form-control" type="text" id="iSigma">  
+
+      </div>
+      <button class="btn btn-default" type="submit" id="bDibujar" onclick="submitData();">Dibujar DFA</button>
     </div>
 
 
@@ -66,5 +77,48 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/cytoscape.min.js"></script>
     <script src="js/DFA.js"></script>
+    <script>
+
+        function validaQ() {
+            var estados = document.getElementById("iQ").value;
+            var arrestados = estados.split(",");
+            var seleccion = document.getElementById("iQ0");
+            seleccion.length = 0;
+            for (var i = 0; i< arrestados.length ;  i++) {
+                var opcion = document.createElement("option");
+                opcion.text = arrestados[i];
+                seleccion.add(opcion);
+            }
+            //window.alert(document.getElementById("iQ0").value);
+        }
+
+        function validaF() {  
+            var estados = document.getElementById("iQ").value;
+            var arrestados = estados.split(",");
+            var final = document.getElementById("iFinal").value;
+            var arrfinal = final.split(",");
+            var estado;
+            var valido=0;
+            for (var i = 0; i < arrfinal.length; i++) {
+                estado = arrfinal[i];
+                for (var j = 0; j < arrestados.length; j++) {
+                    if (estado == arrestados[j]) {
+                        valido = 1;
+                        break;
+                    }
+                    else {
+                        valido = 0;
+                    }
+                }
+                if (valido == 0) {
+                    break
+                }
+            }
+            if (valido == 0) {
+                window.alert("Estados finales no son validos");
+            }   
+        }
+
+    </script>
   </body>
 </html>

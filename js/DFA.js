@@ -1,8 +1,12 @@
+//Agregado por AG
+   
+        
       var Q = ["q1","q2","q3"];
       var Sigma = ["a","b"];
       var q0 = "q1";
       var F = ["q3"];
       var transiciones = [];
+
       transiciones.push({ origen:"q1" , destino:"q2" , simbolo:"a" });
       transiciones.push({ origen:"q1" , destino:"q3" , simbolo:"b" });
       transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"a" });
@@ -11,8 +15,25 @@
       transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });
 
       function submitData() {
-        document.getElementsByClassName("formulario")[0].style = "display:none;"
-        dibujarDFA();
+        var alfa = document.getElementById("iA").value;
+        var estados = document.getElementById("iQ").value;
+        Q = estados.split(",");
+        Sigma = alfa.split(",");
+        if (estados.length == 0) {
+            window.alert("Conjunto de estados no valido");
+        }
+        else 
+        {
+            if (alfa.length == 0) {
+                window.alert("Alfabeto no valido");
+            }
+            else {
+                q0 = document.getElementById("iQ0").value;
+                F = document.getElementById("iFinal").value;
+                document.getElementsByClassName("formulario")[0].style = "display:none;"
+                dibujarDFA();
+            }
+        }
       }
 
 
