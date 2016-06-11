@@ -29,7 +29,7 @@
             }
             else {
                 q0 = document.getElementById("iQ0").value;
-                F = document.getElementById("iFinal").value;
+                F = document.getElementById("iFinal").value.split(",");
                 document.getElementsByClassName("formulario")[0].style = "display:none;"
                 dibujarDFA();
             }
@@ -166,10 +166,7 @@
         var bool2 = Boolean(transicionActual.destino === transiciones[i].destino);
         var bool3 = Boolean(transicionActual.simbolo !== transiciones[i].simbolo);
         var duplicated = Boolean(bool1 && bool2 && bool3);
-        //console.log("Index: "+i+" tIndex: "+index)
-        //console.log(transicionActual);
-        //console.log(transiciones[i]);
-        //console.log("Origen: "+ bool1 +" Destino: "+bool2+" Simbolo: "+bool3+", Duplicated? :"+duplicated);
+
         if(Boolean(duplicated)) {
           return {duplicated: true, duplicatedIndex: i};
         }
@@ -179,9 +176,14 @@
 
      function isFinalState(estado, F) {
       for (var i = F.length - 1; i >= 0; i--) {
-        if(estado === F[i]) {
+        if(estado == F[i]) {
           return true;
         }
       };
-      return false
-;     }
+      return false;
+     }
+
+    function procesarCadena() {
+      var cadena = document.getElementById("inputProcesar").value;
+      window.alert("Cadena:" + cadena);
+    }
