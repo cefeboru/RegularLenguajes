@@ -1,24 +1,45 @@
-      var Q = ["q1","q2","q3"];
+      var Q = ["q1","q2","q3","q4"];
       var Sigma = ["a","b"];
       var q0 = "q1";
       var F = ["q3"];
+      var x; 
       var transiciones = [];
+
+      var qd;
       transiciones.push({ origen:"q1" , destino:"q2" , simbolo:"a" });
       transiciones.push({ origen:"q1" , destino:"q3" , simbolo:"b" });
       transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"a" });
       transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"b" });
       transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"a" });
       transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });
+      transiciones.push({ origen:"q1" , destino:"q4" , simbolo:"b" });
+
 
       function submitData() {
-        document.getElementsByClassName("formulario")[0].style = "display:none;"
-        dibujarNFA();
+        x = document.getElementsByClassName("formulario")
+        x[0].style = "display:none;"
+
+        dibujarDFA();
       }
 
 
       var cy;//Cytoscape CORE
+      //
+     function dibujarDFA() {
+     x = document.getElementsByClassName("form-control"); 
+           var text = "";
+           var i;
+           for (i = 0; i < x.length;i++) {
+               text += x[i].value + "<br>";
+               qd=  x[i].value.split(',');
+               for (var j = 0; j < qd.length-1; j++) {
+                 Q[j] = qd[j];
+               }
 
-     function dibujarNFA() {
+               text += qd[0] + "<br>";
+          }
+          console.log( "Yayyy " + text);
+    
        //INICIALIZACIÓN DE CYTOSCAPE
        cy = cytoscape({
          container: document.getElementById('cy'),
@@ -127,7 +148,7 @@
 
         //TODO
       //MOSTRAR NFA
-      document.getElementsByClassName("NFACanvas")[0].style = "display: block;"
+      document.getElementsByClassName("pdaCanvas")[0].style = "display: block;"
      }
 
 

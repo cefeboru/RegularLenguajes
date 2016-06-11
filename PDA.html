@@ -8,7 +8,7 @@
     <title>Teoria de la Computacíon</title>
 
     <!-- Main CSS -->
-    <link href="css/NFA.css" rel="stylesheet">
+    <link href="css/PDA.css" rel="stylesheet">
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
@@ -23,15 +23,17 @@
     
     <div class="container">
     <div class="header">
-      <h1 align="center">Deterministic Finite Automata</h1>
-      <p>Un <strong>autómata finito determinista</strong> (abreviado NFA por sus siglas en inglés) es un autómata finito que además es un sistema determinista; es decir, para cada estado en que se encuentre el autómata, y con cualquier símbolo del alfabeto leído, existe siempre a lo más una transición posible desde ese estado y con ese símbolo.</p>
+      <h1 align="center">Push Down Automata</h1>
+      <p>Un <strong>Push Down Automata</strong> es una 6-Tupla (Q, Σ, Τ, δ , q_0 , F )  donde  Q, Σ, Τ, δ , y F son conjuntos finitos:</p>
       <h2>Definición formal</h2>
       <p>Formalmente, se define como una 5-tupla (<i>Q</i>, Σ, <i>q<sub>0</sub></i>, δ, <i>F</i>) donde:</p>
       <ul>
         <li><strong>Q</strong> es un conjunto de estados;</li>
         <li><strong>&Sigma;</strong> es un alfabeto;</li>
+        <li><strong>&Tau;</strong> es el alfabeto del stack. Es decir, todos los símbolos que se mantendrán en movimiento en la pila que guarda la máquina, ya sea saliendo o entrando a la misma. En este alfabeto no se incluye el símbolo ε a pesar de que existan transiciones que lo incluyan. Éste símbolo solo representa una acción sin cambios dentro de la pila;</li>
+        <li>&delta;: Q X &Sigma; X &Tau; &rarr; P(Q X &Tau;) es una función de transición;</li>
         <li>q<sub>0</sub> &isin; <strong>Q</strong>;</li>
-        <li>&delta;: Q X &Sigma; &rarr; Q es una función de transición;</li>
+        <li>F⊆<sub></sub> <strong>Q </strong>son los estados finales, perteneciente al conjunto de estados Q;</li>
       </ul>
     </div>
 
@@ -46,15 +48,15 @@
       <div class="form-group">
         <label>q<sub>0</sub></label><input class="form-control" type="text">  
       </div>
-      <button class="btn btn-default" type="submit" onclick="submitData();">Dibujar NFA</button>
+      <button class="btn btn-default" type="submit" onclick="submitData();">Dibujar PDA</button>
     </div>
 
 
-    <div class="NFACanvas">
+    <div class="pdaCanvas">
       <div id="cy"></div>
       <div class="labelsContainer">
-        <div class="NFALabel rootNodeLabel"></div><span>Estado Inicial</span>
-        <div class="NFALabel finalNodeLabel"></div><span>Estado Final</span>
+        <div class="pdaLabel rootNodeLabel"></div><span>Estado Inicial</span>
+        <div class="pdaLabel finalNodeLabel"></div><span>Estado Final</span>
       </div>
     </div>
     </div>
@@ -65,6 +67,6 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/cytoscape.min.js"></script>
-    <script src="js/NFA.js"></script>
+    <script src="js/PDA.js"></script>
   </body>
 </html>
