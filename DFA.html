@@ -61,7 +61,7 @@
 
       </div>
       <button class="btn btn-default" type="submit" id="bDibujar" onclick="submitData();">Dibujar DFA</button>
-	  <button class="btn btn-default" type="submit"  onclick="addText()" />Llenar Datos</button>
+	  <button class="btn btn-default" type="submit"  onclick="LlenarEjemplo()" />Llenar Datos</button>
     </div>
 
 
@@ -94,7 +94,7 @@
     <script src="js/DFA.js"></script>
 	
 	<script type="text/javascript">
-		function addText() {
+		function LlenarEjemplo() {
 			var input = document.getElementById('iQ');
 			input.value = input.value +'q1,q2,q3';
 			
