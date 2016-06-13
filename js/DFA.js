@@ -184,6 +184,111 @@
      }
 
     function procesarCadena() {
+      document.getElementById("headerContainer").style = "display:none;";
+      document.getElementById("procesarCadenaForm").style = "display:none;";
       var cadena = document.getElementById("inputProcesar").value;
-      window.alert("Cadena:" + cadena);
+      var start = cy.elements("#"+q0);
+      var prevColor = start.style().backgroundColor;
+
+      start.animate({ 
+        style: {backgroundColor: "green"},
+        duration:1000
+      });
+      start.animate({ 
+        style: {backgroundColor: prevColor},
+        duration:1000
+      });
+
+      var logElement = document.createElement("p");
+      logElement.innerHTML = "M comienza en el estado " + q0;
+      document.getElementById("DFA_Results").appendChild(logElement);
+      
+      var nodoActual = q0;
+      syncLoop(cadena.length, function(loop){  
+          setTimeout(function(){
+              var i = loop.iteration();
+
+                for (var j = 0;j <= transiciones.length - 1; j++) {
+                  var transicionActual = transiciones[j];
+
+                  if(transicionActual.origen == nodoActual && transicionActual.simbolo === cadena[i]) {
+
+                    var logElement = document.createElement("p");
+                    logElement.innerHTML = "Lee el elemento " + cadena[i]+"<br>";
+                    logElement.innerHTML = logElement.innerHTML + "M esta en "+nodoActual
+                      +" y se mueve a "+transicionActual.destino;
+
+                    document.getElementById("DFA_Results").appendChild(logElement);
+
+                    console.log("Lee el elemento =" + cadena[i]);
+                    console.log("M esta en "+nodoActual+" y se mueve a "+transicionActual.destino);
+
+                    nodoActual = transicionActual.destino;
+                    var element = cy.elements("#"+nodoActual);
+                    prevColor = element.style().backgroundColor;
+
+                    element.animate( {
+                      style: {backgroundColor: "green"},
+                      duration:1000
+                    });
+                    if(i != cadena.length) {
+                      element.animate( {
+                        style: {backgroundColor: prevColor},
+                        duration:1000
+                      });  
+                    }
+                    
+                    break;
+                  }
+                };
+              
+              loop.next();
+          }, 4000);
+      }, function(){
+        setTimeout(function(){
+          var resultDiv;
+          if(isFinalState(nodoActual,F)) {
+            resultDiv = document.getElementById("AcceptedMessage");
+          } else {
+            resultDiv = document.getElementById("DenniedMessage");
+          }
+          document.getElementById("computedString").innerHTML = inputProcesar.value;
+          resultDiv.style = "display:block;"
+        },4000) 
+      });
+
     }
+
+    function syncLoop(iterations, process, exit){  
+        var index = 0,
+            done = false,
+            shouldExit = false;
+        var loop = {
+            next:function(){
+                if(done){
+                    if(shouldExit && exit){
+                        return exit(); // Exit if we're done
+                    }
+                }
+                // If we're not finished
+                if(index < iterations){
+                    index++; // Increment our index
+                    process(loop); // Run our process, pass in the loop
+                // Otherwise we're done
+                } else {
+                    done = true; // Make sure we say we're done
+                    if(exit) exit(); // Call the callback on exit
+                }
+            },
+            iteration:function(){
+                return index - 1; // Return the loop number we're on
+            },
+            break:function(end){
+                done = true; // End the loop
+                shouldExit = end; // Passing end as true means we still call the exit callback
+            }
+        };
+        loop.next();
+        return loop;
+    }
+

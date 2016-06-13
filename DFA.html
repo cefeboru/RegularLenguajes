@@ -22,7 +22,7 @@
   <body>
     
     <div class="container">
-    <div class="header">
+    <div id="headerContainer">
       <h1 align="center">Deterministic Finite Automata</h1>
       <p>Un <strong>autómata finito determinista</strong> (abreviado DFA por sus siglas en inglés) es un autómata finito que además es un sistema determinista; es decir, para cada estado en que se encuentre el autómata, y con cualquier símbolo del alfabeto leído, existe siempre a lo más una transición posible desde ese estado y con ese símbolo.</p>
       <h2>Definición formal</h2>
@@ -71,10 +71,18 @@
         <div class="dfaLabel rootNodeLabel"></div><span>Estado Inicial</span>
         <div class="dfaLabel finalNodeLabel"></div><span>Estado Final</span>
       </div>
-      <br>
-      <div class="form-group"><label>Procesar Cadena: </label><input id="inputProcesar" class="form-control" type="text"/></div>
-      <div class="form-group"><button class="btn btn-default" type="submit" id="btnProcesar" onclick="procesarCadena();">Procesar Cadena</button></div>
-    </div>
+      <div id="procesarCadenaForm">
+        <div class="form-group"><label>Procesar Cadena: </label><input id="inputProcesar" class="form-control" type="text"/></div>
+        <div class="form-group"><button class="btn btn-default" type="submit" id="btnProcesar" onclick="procesarCadena();">Procesar Cadena</button></div>
+      </div>
+      <div id="DFA_Results"></div>
+        <div id="AcceptedMessage">
+          M se encuetra en un estado final, por lo cua M acepta la cadena "<span id="computedString"></span>"
+        </div>
+        <div id="DenniedMessage">
+          M no se encuetra en un estado final, por lo cua M no acepta la cadena "<span id="computedString"></span>"
+        </div>
+      
     </div>
 
 

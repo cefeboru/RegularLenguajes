@@ -16,6 +16,20 @@ body {
   margin: 15px auto 15px auto;
 }
 
+#AcceptedMessage  {
+	display: none;
+	background-color: green;
+}
+
+#DenniedMessage	{
+	display: none;
+	background-color: red;
+}
+
+#DFA_Results {
+	padding-top: 25px;
+}
+
 .labelsContainer {
 	padding-top: 15px;
 }
@@ -30,8 +44,6 @@ body {
 	height: 10px;
 	margin-right: 5px;
 }
-
-
 
 .rootNodeLabel {
 	background-color: #FFFF00;
