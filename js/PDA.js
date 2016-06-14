@@ -1,45 +1,45 @@
-      var Q = ["q1","q2","q3","q4"];
+//Agregado por AG
+   
+        
+      var Q = ["q1","q2","q3"];
       var Sigma = ["a","b"];
       var q0 = "q1";
       var F = ["q3"];
-      var x; 
       var transiciones = [];
 
-      var qd;
       transiciones.push({ origen:"q1" , destino:"q2" , simbolo:"a" });
       transiciones.push({ origen:"q1" , destino:"q3" , simbolo:"b" });
       transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"a" });
       transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"b" });
       transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"a" });
       transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });
-      transiciones.push({ origen:"q1" , destino:"q4" , simbolo:"b" });
-
 
       function submitData() {
-        x = document.getElementsByClassName("formulario")
-        x[0].style = "display:none;"
-
-        dibujarDFA();
+        var alfa = document.getElementById("iA").value;
+        var estados = document.getElementById("iQ").value;
+        Q = estados.split(",");
+        Sigma = alfa.split(",");
+        if (estados.length == 0) {
+            window.alert("Conjunto de estados no valido");
+        }
+        else 
+        {
+            if (alfa.length == 0) {
+                window.alert("Alfabeto no valido");
+            }
+            else {
+                q0 = document.getElementById("iQ0").value;
+                F = document.getElementById("iFinal").value.split(",");
+                document.getElementsByClassName("formulario")[0].style = "display:none;"
+                dibujarPDA();
+            }
+        }
       }
 
 
       var cy;//Cytoscape CORE
-      //
-     function dibujarDFA() {
-     x = document.getElementsByClassName("form-control"); 
-           var text = "";
-           var i;
-           for (i = 0; i < x.length;i++) {
-               text += x[i].value + "<br>";
-               qd=  x[i].value.split(',');
-               for (var j = 0; j < qd.length-1; j++) {
-                 Q[j] = qd[j];
-               }
 
-               text += qd[0] + "<br>";
-          }
-          console.log( "Yayyy " + text);
-    
+     function dibujarPDA() {
        //INICIALIZACIÓN DE CYTOSCAPE
        cy = cytoscape({
          container: document.getElementById('cy'),
@@ -103,9 +103,17 @@
       //CREACIÓN DE NODOS
       for (var i = Q.length - 1; i >= 0; i--) {
         if(Q[i] !== q0) {
-          cy.add([
-            {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 } }
-          ]);
+          if( isFinalState(Q[i],F) ) {
+            console.log("Es estado final: " + Q[i]);
+            cy.add([
+              {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 }, classes: 'final' }
+            ]);
+          } else {
+            cy.add([
+              {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 } }
+            ]);  
+          }
+          
         }
       };
       
@@ -147,7 +155,7 @@
 
 
         //TODO
-      //MOSTRAR NFA
+      //MOSTRAR PDA
       document.getElementsByClassName("pdaCanvas")[0].style = "display: block;"
      }
 
@@ -158,14 +166,129 @@
         var bool2 = Boolean(transicionActual.destino === transiciones[i].destino);
         var bool3 = Boolean(transicionActual.simbolo !== transiciones[i].simbolo);
         var duplicated = Boolean(bool1 && bool2 && bool3);
-        console.log("Index: "+i+" tIndex: "+index)
-        console.log(transicionActual);
-        console.log(transiciones[i]);
-        console.log("Origen: "+ bool1 +" Destino: "+bool2+" Simbolo: "+bool3+", Duplicated? :"+duplicated);
+
         if(Boolean(duplicated)) {
-          console.log("hurray");
           return {duplicated: true, duplicatedIndex: i};
         }
       };
       return {duplicated:false};
      }
+
+     function isFinalState(estado, F) {
+      for (var i = F.length - 1; i >= 0; i--) {
+        if(estado == F[i]) {
+          return true;
+        }
+      };
+      return false;
+     }
+
+    function procesarCadena() {
+      document.getElementById("headerContainer").style = "display:none;";
+      document.getElementById("procesarCadenaForm").style = "display:none;";
+      var cadena = document.getElementById("inputProcesar").value;
+      var start = cy.elements("#"+q0);
+      var prevColor = start.style().backgroundColor;
+
+      start.animate({ 
+        style: {backgroundColor: "green"},
+        duration:1000
+      });
+      start.animate({ 
+        style: {backgroundColor: prevColor},
+        duration:1000
+      });
+
+      var logElement = document.createElement("p");
+      logElement.innerHTML = "M comienza en el estado " + q0;
+      document.getElementById("PDA_Results").appendChild(logElement);
+      
+      var nodoActual = q0;
+      syncLoop(cadena.length, function(loop){  
+          setTimeout(function(){
+              var i = loop.iteration();
+
+                for (var j = 0;j <= transiciones.length - 1; j++) {
+                  var transicionActual = transiciones[j];
+
+                  if(transicionActual.origen == nodoActual && transicionActual.simbolo === cadena[i]) {
+
+                    var logElement = document.createElement("p");
+                    logElement.innerHTML = "Lee el elemento " + cadena[i]+"<br>";
+                    logElement.innerHTML = logElement.innerHTML + "M esta en "+nodoActual
+                      +" y se mueve a "+transicionActual.destino;
+
+                    document.getElementById("PDA_Results").appendChild(logElement);
+
+                    console.log("Lee el elemento =" + cadena[i]);
+                    console.log("M esta en "+nodoActual+" y se mueve a "+transicionActual.destino);
+
+                    nodoActual = transicionActual.destino;
+                    var element = cy.elements("#"+nodoActual);
+                    prevColor = element.style().backgroundColor;
+
+                    element.animate( {
+                      style: {backgroundColor: "green"},
+                      duration:1000
+                    });
+                    if(i != cadena.length) {
+                      element.animate( {
+                        style: {backgroundColor: prevColor},
+                        duration:1000
+                      });  
+                    }
+                    
+                    break;
+                  }
+                };
+              
+              loop.next();
+          }, 4000);
+      }, function(){
+        setTimeout(function(){
+          var resultDiv;
+          if(isFinalState(nodoActual,F)) {
+            resultDiv = document.getElementById("AcceptedMessage");
+          } else {
+            resultDiv = document.getElementById("DenniedMessage");
+          }
+          document.getElementById("computedString").innerHTML = inputProcesar.value;
+          resultDiv.style = "display:block;"
+        },4000) 
+      });
+
+    }
+
+    function syncLoop(iterations, process, exit){  
+        var index = 0,
+            done = false,
+            shouldExit = false;
+        var loop = {
+            next:function(){
+                if(done){
+                    if(shouldExit && exit){
+                        return exit(); // Exit if we're done
+                    }
+                }
+                // If we're not finished
+                if(index < iterations){
+                    index++; // Increment our index
+                    process(loop); // Run our process, pass in the loop
+                // Otherwise we're done
+                } else {
+                    done = true; // Make sure we say we're done
+                    if(exit) exit(); // Call the callback on exit
+                }
+            },
+            iteration:function(){
+                return index - 1; // Return the loop number we're on
+            },
+            break:function(end){
+                done = true; // End the loop
+                shouldExit = end; // Passing end as true means we still call the exit callback
+            }
+        };
+        loop.next();
+        return loop;
+    }
+
