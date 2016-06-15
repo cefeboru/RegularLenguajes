@@ -23,16 +23,17 @@
     
     <div class="container">
     <div id="headerContainer">
-      <h1 align="center">Deterministic Finite Automata</h1>
-      <p>Un <strong>autómata finito determinista</strong> (abreviado PDA por sus siglas en inglés) es un autómata finito que además es un sistema determinista; es decir, para cada estado en que se encuentre el autómata, y con cualquier símbolo del alfabeto leído, existe siempre a lo más una transición posible desde ese estado y con ese símbolo.</p>
+      <h1 align="center">Push Down Automata</h1>
+      <p>Un <strong>Push Down automata</strong> (abreviado PDA por sus siglas en inglés) Un autómata de pila o Push-Down es un autómata que cuenta con un mecanismo que permita almacenamiento ilimitado y opera como una pila.El autómata de pila (se abrevia PDA de sus siglas en inglés Push-Down Autómata) tiene una cinta de entrada, un control finito y una pila.  El símbolo que se encuentra más a la izquierda se considera como que está en la “cima”. El dispositivo será no determinístico y tendrá un número finito de alternativas de movimiento en cada situación.</p>
       <h2>Definición formal</h2>
-      <p>Formalmente, se define como una 5-tupla (<i>Q</i>, Σ, <i>q<sub>0</sub></i>, δ, <i>F</i>) donde:</p>
+      <p>Formalmente, se define como una 6-tupla (<i>Q</i>, Σ, <i>q<sub>0</sub></i>,&Gamma;, δ, <i>F</i>) donde:</p>
       <ul>
-        <li><strong>Q</strong> es un conjunto de estados</li>
-        <li><strong>&Sigma;</strong> es un alfabeto;</li>
-        <li>q<sub>0</sub> &isin; <strong>Q</strong>;</li>
-        <li>&delta;: Q X &Sigma; &rarr; Q es una función de transición</li>
-        <li><strong>F</strong> es un conjunto de estados Finales</li>
+        <li><strong>Q</strong>es el conjunto de estados.</li>
+        <li><strong>&Sigma;</strong> es el alfabeto de entrada;</li>
+        <li><strong>&Gamma;</strong> es el alfabeto del stack. Es decir, todos los símbolos que se mantendrán en movimiento en la pila que guarda la máquina, ya sea saliendo o entrando a la misma. En este alfabeto no se incluye el símbolo ε a pesar de que existan transiciones que lo incluyan. Éste símbolo solo representa una acción sin cambios dentro de la pila;</li>
+        <li><strong>&delta;</strong>: Q X &Sigma; X &Gamma; &rarr; P( Q X &Gamma; ) es una función de transición</li>
+        <li>q<sub>0</sub> &isin; Q;</li>
+        <li><strong>F </strong>⊆ Q es un conjunto de estados Finales</li>
       </ul>
     </div>
 
