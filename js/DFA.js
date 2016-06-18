@@ -183,6 +183,12 @@
       return false;
      }
 
+     function getBack(){
+        document.getElementById("headerContainer").style = "display:block;";
+        document.getElementById("procesarCadenaForm").style = "display:block;";   
+     }
+
+
     function procesarCadena() {
       document.getElementById("headerContainer").style = "display:none;";
       document.getElementById("procesarCadenaForm").style = "display:none;";
