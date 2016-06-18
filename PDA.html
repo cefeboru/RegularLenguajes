@@ -63,6 +63,7 @@
       </div>
       <button class="btn btn-default" type="submit" id="bDibujar" onclick="submitData();">Dibujar PDA</button>
     <button class="btn btn-default" type="submit"  onclick="LlenarEjemplo()" />Llenar Datos</button>
+	<button class="btn btn-default" name="agregar" type="image" id="agregar" onclick="Limpiar()" >Limpiar Datos </button>
     </div>
 
 
@@ -110,7 +111,16 @@
     }
   </script>
   
-  
+    <script type="text/javascript">
+		function Limpiar()
+		{
+			document.getElementById("iQ").value="";
+			document.getElementById("iA").value="";
+			document.getElementById("iFinal").value="";
+			document.getElementById("iSigma").value="";
+		}
+	</script>
+	
     <script>
 
         function validaQ() {
