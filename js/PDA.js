@@ -14,6 +14,7 @@ var transiciones = [];
       transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"a" });
       transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });
       */
+
       function submitData() {
         var alfa = document.getElementById("iA").value;
         var estados = document.getElementById("iQ").value;
@@ -41,7 +42,7 @@ var transiciones = [];
        
 
 
-        console.log(result);
+        console.log(transiciones[0].simbolo);
 
         if (estados.length == 0) {
           window.alert("Conjunto de estados no valido");
