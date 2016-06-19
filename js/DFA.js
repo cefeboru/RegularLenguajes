@@ -258,7 +258,7 @@
           } else {
             resultDiv = document.getElementById("DenniedMessage");
           }
-          document.getElementById("computedString").innerHTML = inputProcesar.value;
+          document.getElementById("computedString").innerHTML = document.getElementById("inputProcesar").value;
           resultDiv.style = "display:block;"
         },4000) 
       });

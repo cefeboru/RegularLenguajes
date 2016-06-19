@@ -16,14 +16,8 @@ body {
   margin: 15px auto 15px auto;
 }
 
-#AcceptedMessage  {
+#AcceptedMessage, #DenniedMessage {
 	display: none;
-	background-color: green;
-}
-
-#DenniedMessage	{
-	display: none;
-	background-color: red;
 }
 
 #DFA_Results {
