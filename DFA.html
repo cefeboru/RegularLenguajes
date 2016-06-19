@@ -79,11 +79,13 @@
       <div id="DFA_Results"></div>
         <div id="AcceptedMessage">
           M se encuetra en un estado final, por lo cua M acepta la cadena "<span id="computedString"></span>"
+          <button onclick="getBack()">Volver</button>
         </div>
         <div id="DenniedMessage">
-          M no se encuetra en un estado final, por lo cua M no acepta la cadena "<span id="computedString"></span>"
+          <span style="color:red;">M no se encuetra en un estado final, por lo cua M no acepta la cadena "<span id="computedString"></span>"</span>
+          <button onclick="getBack()">Volver</button>
         </div>
-        <button onclick="getBack()">Volver</button>
+        
     </div>
 
 
@@ -98,12 +100,14 @@
 		function LlenarEjemplo() {
 			var input = document.getElementById('iQ');
 			input.value = input.value +'q1,q2,q3';
-			
+
+      validaQ();
+
 			var input2 = document.getElementById('iA');
-			input2.value = input2.value +'1,2';
+			input2.value = input2.value +'0,1';
 			
 			var input3 = document.getElementById('iFinal');
-			input3.value = input3.value +'q2,q3';
+			input3.value = input3.value +'q2';
 			
 			var input4 = document.getElementById('iSigma');
 			input4.value = input4.value +'(q1:0:q2),(q1:1:q1),(q1:0:q2)';
@@ -117,13 +121,11 @@
 			document.getElementById("iA").value="";
 			document.getElementById("iFinal").value="";
 			document.getElementById("iSigma").value="";
+      document.getElementById("iQ0").innerHTML = "";
 		}
 	</script>
 	
     <script>
-
-
-
         function validaQ() {
             var estados = document.getElementById("iQ").value;
             var arrestados = estados.split(",");
@@ -134,7 +136,6 @@
                 opcion.text = arrestados[i];
                 seleccion.add(opcion);
             }
-            //window.alert(document.getElementById("iQ0").value);
         }
 
         function validaF() {  

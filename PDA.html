@@ -48,9 +48,6 @@
       <div class="form-group">
         <label>q<sub>0</sub> / Seleccionar estado inicial</label>&nbsp;
     <select class="form-control" id="iQ0">
-    <option value="q0">q1</option>
-    <option value="q1">q2</option>
-    <option value="q2">q3</option>
     </select> 
       </div>
       <div class="form-group">
@@ -99,9 +96,11 @@
     function LlenarEjemplo() {
       var input = document.getElementById('iQ');
       input.value = input.value +'q1,q2,q3';
+
+      validaQ();
       
       var input2 = document.getElementById('iA');
-      input2.value = input2.value +'1,2';
+      input2.value = input2.value +'0,1';
       
       var input3 = document.getElementById('iFinal');
       input3.value = input3.value +'q2,q3';
@@ -116,7 +115,8 @@
 		{
 			document.getElementById("iQ").value="";
 			document.getElementById("iA").value="";
-			document.getElementById("iFinal").value="";
+      document.getElementById("iA").innerHTML="";
+			document.getElementById("iQ0").value="";
 			document.getElementById("iSigma").value="";
 		}
 	</script>

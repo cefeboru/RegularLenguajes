@@ -52,3 +52,7 @@ body {
 .finalNodeLabel {
 	background-color: #DC143C;	
 }
+
+.container {
+	margin-bottom: 50px;
+}
