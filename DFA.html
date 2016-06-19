@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Teoria de la Computacíon</title>
+    <title>DFA</title>
 
     <!-- Main CSS -->
     <link href="css/DFA.css" rel="stylesheet">
@@ -78,12 +78,12 @@
       </div>
       <div id="DFA_Results"></div>
         <div id="AcceptedMessage">
-          M se encuetra en un estado final, por lo cua M acepta la cadena "<span id="computedString"></span>"
-          <button onclick="getBack()">Volver</button>
+          <span style="color:green;">M se encuetra en un estado final, por lo cua M acepta la cadena "<span id="correctString"></span>"</span>
+          <button onclick="getBack()" class="btn btn-default">Volver</button>
         </div>
         <div id="DenniedMessage">
-          <span style="color:red;">M no se encuetra en un estado final, por lo cua M no acepta la cadena "<span id="computedString"></span>"</span>
-          <button onclick="getBack()">Volver</button>
+          <span style="color:red;">M no se encuetra en un estado final, por lo cua M no acepta la cadena "<span id="wrongString"></span>"</span>
+          <button onclick="getBack()" class="btn btn-default">Volver</button>
         </div>
         
     </div>

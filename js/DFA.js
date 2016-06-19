@@ -186,6 +186,9 @@
      function getBack(){
         document.getElementById("headerContainer").style = "display:block;";
         document.getElementById("procesarCadenaForm").style = "display:block;";   
+        document.getElementById("DFA_Results").innerHTML = "";
+        document.getElementById("AcceptedMessage").style = "display:none;"
+        document.getElementById("DenniedMessage").style = "display:none;"
      }
 
 
@@ -254,12 +257,15 @@
         setTimeout(function(){
           var resultDiv;
           if(isFinalState(nodoActual,F)) {
+
             resultDiv = document.getElementById("AcceptedMessage");
+            document.getElementById("correctString").innerHTML = document.getElementById("inputProcesar").value;
           } else {
+
             resultDiv = document.getElementById("DenniedMessage");
+            document.getElementById("wrongString").innerHTML = document.getElementById("inputProcesar").value;
           }
-          document.getElementById("computedString").innerHTML = document.getElementById("inputProcesar").value;
-          resultDiv.style = "display:block;"
+          resultDiv.style = "display:block;";
         },4000) 
       });
 
