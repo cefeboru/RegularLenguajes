@@ -24,25 +24,7 @@ var transiciones = [];
         Sigma = alfa.split(",");
         transarr = trans.split(";")
 
-        result = [];
-        transarr = trans.split(";");
-        for (var i = transarr.length - 1; i >= 0; i--) {
-          var arr = transarr[i].split(":");
-          result.push(arr[0].trim().substring(1));
-          result.push(arr[1].trim());
-          result.push(arr[2].trim().substring(0,2));
-        }
-
-        
-        for (var i = 0; i <= result.length-1; i=i+3) {
-          transiciones.push({ origen: result[i] , destino:result[i+2] , simbolo:result[i+1] });
-        }
-        
-
-       
-
-
-        console.log(transiciones[0].simbolo);
+        //console.log(transiciones[0].simbolo);
 
         if (estados.length == 0) {
           window.alert("Conjunto de estados no valido");
@@ -53,6 +35,19 @@ var transiciones = [];
             window.alert("Alfabeto no valido");
           }
           else {
+            result = [];
+            transarr = trans.split(";");
+            for (var i = transarr.length - 1; i >= 0; i--) {
+              var arr = transarr[i].split(":");
+              result.push(arr[0].trim().substring(1));
+              result.push(arr[1].trim());
+              result.push(arr[2].trim().substring(0,2));
+            }
+
+        
+        for (var i = 0; i <= result.length-1; i=i+3) {
+          transiciones.push({ origen: result[i] , destino:result[i+2] , simbolo:result[i+1] });
+        }            
             q0 = document.getElementById("iQ0").value;
             F = document.getElementById("iFinal").value.split(",");
             document.getElementsByClassName("formulario")[0].style = "display:none;"

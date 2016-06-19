@@ -53,10 +53,10 @@
     </select> 
       </div>
       <div class="form-group">
-        <label>F / Escribir lista separada por comas, ejemplo: q2,q3</label><input class="form-control" type="text" id="iFinal" onchange="validaF()">  
+        <label>F / Escribir lista separada por comas, ejemplo: q2,q3</label><input class="form-control" type="text" id="iFinal" >  
       </div>
       <div class="form-group">
-        <label><strong>&delta;</strong> / Escribir lista de 3 tuplas (Origen:Simbolo:Destino) separadas por comas, ejemplo: (q1:0:q2),(q1:1:q1),(q1:0:q2) </label>
+        <label><strong>&delta;</strong> / Escribir lista de 3 tuplas (Origen:Simbolo:Destino) separadas por punto y comas; ejemplo: (q1:0:q2);(q1:1:q1);(q1:0:q2) </label>
         <input class="form-control" type="text" id="iSigma">  
 
       </div>
@@ -107,10 +107,10 @@
 			input2.value = input2.value +'0,1';
 			
 			var input3 = document.getElementById('iFinal');
-			input3.value = input3.value +'q2';
+			input3.value = input3.value +'q1';
 			
 			var input4 = document.getElementById('iSigma');
-			input4.value = input4.value +'(q1:0:q2),(q1:1:q1),(q1:0:q2)';
+			input4.value = input4.value +'(q1:0:q1);(q1:1:q2);(q2:0:q3);(q2:1:q1);(q3:0:q2);(q3:1:q3)';
 		}
 	</script>
 	
@@ -138,32 +138,7 @@
             }
         }
 
-        function validaF() {  
-            var estados = document.getElementById("iQ").value;
-            var arrestados = estados.split(",");
-            var final = document.getElementById("iFinal").value;
-            var arrfinal = final.split(",");
-            var estado;
-            var valido=0;
-            for (var i = 0; i < arrfinal.length; i++) {
-                estado = arrfinal[i];
-                for (var j = 0; j < arrestados.length; j++) {
-                    if (estado == arrestados[j]) {
-                        valido = 1;
-                        break;
-                    }
-                    else {
-                        valido = 0;
-                    }
-                }
-                if (valido == 0) {
-                    break
-                }
-            }
-            if (valido == 0) {
-                window.alert("Estados finales no son validos");
-            }   
-        }
+
 
     </script>
   </body>

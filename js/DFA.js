@@ -6,19 +6,24 @@
       var q0 = "q1";
       var F = ["q3"];
       var transiciones = [];
-
+      validof=0;
+      validotra=0;
+      /*  
       transiciones.push({ origen:"q1" , destino:"q2" , simbolo:"a" });
       transiciones.push({ origen:"q1" , destino:"q3" , simbolo:"b" });
       transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"a" });
       transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"b" });
       transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"a" });
       transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });
-
+       */ 
       function submitData() {
         var alfa = document.getElementById("iA").value;
         var estados = document.getElementById("iQ").value;
+        var trans = document.getElementById("iSigma").value;
         Q = estados.split(",");
         Sigma = alfa.split(",");
+
+
         if (estados.length == 0) {
             window.alert("Conjunto de estados no valido");
         }
@@ -28,15 +33,127 @@
                 window.alert("Alfabeto no valido");
             }
             else {
-                q0 = document.getElementById("iQ0").value;
-                F = document.getElementById("iFinal").value.split(",");
-                document.getElementsByClassName("formulario")[0].style = "display:none;"
-                dibujarDFA();
+                validaF()
+                if (validof == 0) {
+                    window.alert("Conjunto de estados finales no valido");
+                }   
+                else {  
+                  validaTrans();
+                  if (validotra==0){
+                     window.alert("transiciones no validas"); 
+                  } 
+                  else{ 
+                    result = [];
+                    transarr = trans.split(";");
+                    for (var i = transarr.length - 1; i >= 0; i--) {
+                      var arr = transarr[i].split(":");
+                      result.push(arr[0].trim().substring(1));
+                      result.push(arr[1].trim());
+                      result.push(arr[2].trim().substring(0,2));
+                    }
+                    for (var i = 0; i <= result.length-1; i=i+3) {
+                      transiciones.push({ origen: result[i] , destino:result[i+2] , simbolo:result[i+1] });
+                    }
+
+                    q0 = document.getElementById("iQ0").value;
+                    F = document.getElementById("iFinal").value.split(",");
+                    document.getElementsByClassName("formulario")[0].style = "display:none;"
+                    dibujarDFA();
+                  }
+                }
             }
         }
       }
+    function validaF() {  
+          var estados = document.getElementById("iQ").value;
+          var arrestados = estados.split(",");
+          var final = document.getElementById("iFinal").value;
+          var arrfinal = final.split(",");
+          var estado;
+          for (var i = 0; i < arrfinal.length; i++) {
+              estado = arrfinal[i];
+              for (var j = 0; j < arrestados.length; j++) {
+                  if (estado == arrestados[j]) {
+                      validof = 1;
+                      break;
+                  }
+                  else {
+                      validof = 0;
+                  }
+              }
+              if (validof == 0) {
+                  break
+              }
+          }
 
-
+      }
+      function validaTrans()
+      {
+            var trans = document.getElementById("iSigma").value;
+            result = [];
+            transarr = trans.split(";");
+            var eorigen="";
+            var edestino="";
+            var strans="";
+            validotra=0;
+            var estados = document.getElementById("iQ").value;
+            var arrestados = estados.split(",");
+            var alfa = document.getElementById("iA").value;
+            var arralfa=alfa.split(",");
+            for (var i = transarr.length - 1; i >= 0; i--) {
+              var arr = transarr[i].split(":");
+              result.push(arr[0].trim().substring(1));
+              result.push(arr[1].trim());
+              result.push(arr[2].trim().substring(0,2));
+            }
+            for (var i = 0; i <= result.length-1; i=i+3) {
+               eorigen = result[i];
+               edestino =result[i+2];
+               strans = result[i+1];
+               //Validar Estado Origen
+                for (var j = 0; j < arrestados.length; j++) {
+                    if (eorigen == arrestados[j]) {
+                        validotra = 1;
+                        break;
+                    }
+                    else {
+                        validotra = 0;
+                    }               
+                 }
+                //Validar Estado Destino
+                if(validotra==1)
+                {
+                  for (var j = 0; j < arrestados.length; j++) {
+                      if (edestino == arrestados[j]) {
+                          validotra = 1;
+                          break;
+                      }
+                      else {
+                          validotra = 0;
+                      }               
+                   }   
+                 }
+                if(validotra==1)
+                {                  
+                   //Validar Simbolos 
+                  for (var j = 0; j < arralfa.length; j++) {
+         
+                     if (strans == arralfa[j]) {
+                          validotra = 1;
+                          break;
+                      }
+                      else {
+                          validotra = 0;
+                      }                
+                  }                
+                }
+                  
+              if (validotra == 0) {
+                  break
+              }               
+              //transiciones.push({ origen: result[i] , destino:result[i+2] , simbolo:result[i+1] });
+            }
+      }
       var cy;//Cytoscape CORE
 
      function dibujarDFA() {
@@ -96,6 +213,7 @@
       });
       
       //NODO Q0
+
       cy.add([
         { group: "nodes", data: { id: q0 }, position: {x: 145, y: 50}, classes: 'root' }
       ]);
