@@ -22,17 +22,6 @@ var transiciones = [];
         Q = estados.split(",");
         Sigma = alfa.split(",");
         transarr = trans.split(";")
-/*
-        for (var i = transarr.length - 1; i >= 0; i--) {
-         transarr2 = transiciones.push({ origen:transarr[i].split(/:\(\) /)[0], destino:transarr[i].split(/:\(\) /)[2], simbolo:transarr[i].split(/:\(\) /)[1] }) ;
-        transarr2 = transarr[i].split(/\(([:]+)\)/);
-
-
-
-
-        console.log(transarr2[0] + transarr2[1] + transarr2[2] );
-        }
-        */
 
         result = [];
         transarr = trans.split(";");
@@ -43,16 +32,14 @@ var transiciones = [];
           result.push(arr[2].trim().substring(0,2));
         }
 
-        /*
         
-        console.log( trans.split(";") )
-        forEach(function(element){
-          var arr = element.split(":");
-          result.push(arr[0].trim().substring(1));
-          result.push(arr[1].trim());
-          result.push(arr[2].trim().substring(0,2));
-        });
-/*/
+        for (var i = 0; i <= result.length-1; i=i+3) {
+          transiciones.push({ origen: result[i] , destino:result[i+2] , simbolo:result[i+1] });
+        }
+        
+
+       
+
 
         console.log(result);
 
@@ -163,7 +150,7 @@ var transiciones = [];
         if(evaluarTransicion.duplicated) {
           var index = evaluarTransicion.duplicatedIndex;
           var edgeId = transicionActual.origen.concat("-").concat(transicionActual.destino);
-          var edgeSigmaSymbol = transicionActual.simbolo.concat(",").concat(transiciones[index].simbolo);
+          var edgeSigmaSymbol = transicionActual.simbolo.concat(" | ").concat(transiciones[index].simbolo);
           cy.add({
             group: "edges",
             data: {
