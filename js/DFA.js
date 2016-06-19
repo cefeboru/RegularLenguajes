@@ -191,6 +191,11 @@
         document.getElementById("DenniedMessage").style = "display:none;"
      }
 
+     function getBackForm() {
+        document.getElementsByClassName("dfaCanvas")[0].style = "display: none;"
+        document.getElementsByClassName("formulario")[0].style = "display:block;"
+     }
+
 
     function procesarCadena() {
       document.getElementById("headerContainer").style = "display:none;";
