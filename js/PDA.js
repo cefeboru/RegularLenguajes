@@ -171,15 +171,7 @@ var transiciones = [];
          }]);
         }
       };
-      /*cy.add([{ 
-                group: "edges", 
-                data: { 
-                  id: EdgeId, source: transicionActual.origen, target: transicionActual.destino, label: alphabetSymbol
-                }
-              }]);*/
 
-
-        //TODO
       //MOSTRAR PDA
       document.getElementsByClassName("pdaCanvas")[0].style = "display: block;"
     }
@@ -236,7 +228,21 @@ var transiciones = [];
           for (var j = 0;j <= transiciones.length - 1; j++) {
             var transicionActual = transiciones[j];
 
-            if(transicionActual.origen == nodoActual && transicionActual.simbolo === cadena[i]) {
+            var tempArray = transicionActual.simbolo.split("→");
+            var input = tempArray[0].split(",")[0];
+            var stackElement = tempArray[0].split(",")[0];
+            var pushElement = tempArray[1];
+
+            var stackArray = [];
+
+            if(transicionActual.origen == nodoActual && input === cadena[i]) {
+              if(stackElement == 'ε') {
+
+              } else {
+                var stackSize = stackArray.length;
+                if(stackSize > 0) {}
+              }
+
 
               var logElement = document.createElement("p");
               logElement.innerHTML = "Lee el elemento " + cadena[i]+"<br>";

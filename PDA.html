@@ -43,7 +43,7 @@
         <label>Q (Escribir lista separada por comas, ejemplo: q1,q2,q3)</label><input class="form-control" type="text" id="iQ" onchange="validaQ()" >  
       </div>
       <div class="form-group">
-        <label>&Sigma; / Escribir lista separada por comas, ejemplo: 1,2 </label><input class="form-control" type="text" id="iA">  
+        <label>&Sigma; / Escribir lista separada por comas, ejemplo: 0,1 </label><input class="form-control" type="text" id="iA">  
       </div>
       <div class="form-group">
         <label>q<sub>0</sub> / Seleccionar estado inicial</label>&nbsp;
@@ -54,7 +54,7 @@
         <label>F / Escribir lista separada por comas, ejemplo: q2,q3</label><input class="form-control" type="text" id="iFinal" onchange="validaF()">  
       </div>
       <div class="form-group">
-        <label><strong>&delta;</strong> / Escribir lista de 3 tuplas (Origen:entrada,pop del stack->push al stack:Destino) separadas por comas, ejemplo: (q1:1,0->1:q2);(q1:2,0->1:q1);(q1:1,1->1:q3) </label>
+        <label><strong>&delta;</strong> / Escribir lista de 3 tuplas (Origen:entrada,pop del stack->push al stack:Destino) separadas por comas, ejemplo: (q1:ε,ε&rarr;$:q2);(q2:2,0&rarr;1:q3);(q3:ε,$&rarr;ε:q4) </label>
         <input class="form-control" type="text" id="iSigma">  
 
       </div>
@@ -95,7 +95,7 @@
   <script type="text/javascript">
     function LlenarEjemplo() {
       var input = document.getElementById('iQ');
-      input.value = input.value +'q1,q2,q3';
+      input.value = input.value +'q1,q2,q3,q4';
 
       validaQ();
       
@@ -103,10 +103,10 @@
       input2.value = input2.value +'0,1';
       
       var input3 = document.getElementById('iFinal');
-      input3.value = input3.value +'q2,q3';
+      input3.value = input3.value +'q4';
       
       var input4 = document.getElementById('iSigma');
-      input4.value = input4.value +'(q1:1,0->1:q2);(q1:2,0->1:q1);(q1:1,1->1:q3)';
+      input4.value = input4.value +'(q1:ε,ε→$:q2);(q2:0,ε→0:q2);(q2:1,0→ε:q3);(q3:1,0→ε:q3);(q3:ε,$→ε:q4)';
     }
   </script>
   
@@ -115,8 +115,8 @@
 		{
 			document.getElementById("iQ").value="";
 			document.getElementById("iA").value="";
-      document.getElementById("iA").innerHTML="";
-			document.getElementById("iQ0").value="";
+      document.getElementById("iFinal").value="";
+			document.getElementById("iQ0").innerHTML="";
 			document.getElementById("iSigma").value="";
 		}
 	</script>
