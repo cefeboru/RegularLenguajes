@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>TM</title>
+
+  <!-- Main CSS -->
+  <link href="css/TM.css" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+    </head>
+    <body>
+
+      <div class="container">
+        <div id="headerContainer">
+          <h1 align="center">Maquina de Turing</h1>
+          <p>Una <strong>Maquina de turing</strong> La máquina de Turing modela matemáticamente a una máquina que opera mecánicamente sobre una cinta. En esta cinta hay símbolos que la máquina puede leer y escribir, uno a la vez, usando un cabezal lector/escritor de cinta. </p>
+          <h2>Definición formal</h2>
+          <p>Una máquina de Turing es una 7-Tupla (Q, \Sigma, \Gamma, \delta_ , q_0 , q_a , q_r )  donde  Q, \Sigma  y  \Gamma son conjuntos finitos y: 
+            <ul>
+              <li><strong>Q</strong> es el conjunto de estados.</li>
+              <li><strong>&Sigma;</strong> es el alfabeto de entrada;</li>
+              <li><strong>&Gamma;</strong> es el alfabeto del stack. estos seran los del alfabeto de entrada, mas $ y &epsilon;;</li>
+              <li><strong>&delta;</strong>: Q X &Sigma; X &Gamma; &rarr; P( Q X &Gamma; ) es una función de transición</li>
+              <li>q<sub>0</sub> &isin; Q;</li>
+              <li>q<sub>a</sub>>es el estado de aceptacion.</li>
+              <li>q<sub>r</sub>>es el estado de rechazo.</li>
+            </ul>
+          </div>
+
+
+          <div class="formulario">
+            <div class="form-group">
+              <label>Q (Escribir lista separada por comas, ejemplo: q1,q2,q3)</label><input class="form-control" type="text" id="iQ" onchange="validaQ()" >  
+            </div>
+            <div class="form-group">
+              <label>&Sigma; / Escribir lista separada por comas, ejemplo: 1,2 </label><input class="form-control" type="text" id="iA">  
+            </div>
+            <div class="form-group">
+              <label>q<sub>0</sub> / Seleccionar estado inicial</label>&nbsp;
+              <select class="form-control" id="iQ0">
+              </select> 
+            </div>
+            
+            <div class="form-group">
+              <label>F / Escribir lista separada por comas, ejemplo: q2,q3</label><input class="form-control" type="text" id="iFinal" onchange="validaF()">  
+            </div>
+            <div class="form-group">
+              <label><strong>&delta;</strong> / Escribir lista de 3 tuplas (Origen:entrada,pop del stack->push al stack:Destino) separadas por comas, ejemplo: (q1:1,0->1:q2);(q1:2,0->1:q1);(q1:1,1->1:q3) </label>
+              <input class="form-control" type="text" id="iSigma">  
+
+            </div>
+            <button class="btn btn-default" type="submit" id="bDibujar" onclick="submitData();">Dibujar TM</button>
+            <button class="btn btn-default" type="submit"  onclick="LlenarEjemplo()" />Llenar Datos</button>
+            <button class="btn btn-default" name="agregar" type="image" id="agregar" onclick="Limpiar()" >Limpiar Datos </button>
+          </div>
+
+
+          <div class="tmCanvas">
+            <div id="cy"></div>
+            <div class="labelsContainer">
+              <div class="tmLabel rootNodeLabel"></div><span>Estado Inicial</span>
+              <div class="tmLabel finalNodeLabel"></div><span>Estado Final</span>
+            </div>
+            <div id="procesarCadenaForm">
+              <div class="form-group"><label>Procesar Cadena: </label><input id="inputProcesar" class="form-control" type="text"/></div>
+              <div class="form-group"><button class="btn btn-default" type="submit" id="btnProcesar" onclick="procesarCadena();">Procesar Cadena</button></div>
+            </div>
+            <div id="TM_Results"></div>
+            <div id="AcceptedMessage">
+              M se encuetra en un estado final, por lo cua M acepta la cadena "<span id="computedString"></span>"
+            </div>
+            <div id="DenniedMessage">
+              M no se encuetra en un estado final, por lo cua M no acepta la cadena "<span id="computedString"></span>"
+            </div>
+
+          </div>
+
+
+          <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+          <!-- Include all compiled plugins (below), or include individual files as needed -->
+          <script src="js/bootstrap.min.js"></script>
+          <script src="js/cytoscape.min.js"></script>
+          <script src="js/TM.js"></script>
+
+          <script type="text/javascript">
+            function LlenarEjemplo() {
+              var input = document.getElementById('iQ');
+              input.value = input.value +'q1,q2,q3';
+
+              validaQ();
+
+              var input2 = document.getElementById('iA');
+              input2.value = input2.value +'0,1';
+
+              var input3 = document.getElementById('iFinal');
+              input3.value = input3.value +'q2,q3';
+
+              var input4 = document.getElementById('iSigma');
+              input4.value = input4.value +'(q1:1,0->1:q2);(q1:2,0->1:q1);(q1:1,1->1:q3)';
+            }
+          </script>
+
+          <script type="text/javascript">
+            function Limpiar()
+            {
+             document.getElementById("iQ").value="";
+             document.getElementById("iA").value="";
+             document.getElementById("iA").innerHTML="";
+             document.getElementById("iQ0").value="";
+             document.getElementById("iSigma").value="";
+           }
+         </script>
+
+         <script>
+
+          function validaQ() {
+            var estados = document.getElementById("iQ").value;
+            var arrestados = estados.split(",");
+            var seleccion = document.getElementById("iQ0");
+            seleccion.length = 0;
+            for (var i = 0; i< arrestados.length ;  i++) {
+              var opcion = document.createElement("option");
+              opcion.text = arrestados[i];
+              seleccion.add(opcion);
+            }
+            //window.alert(document.getElementById("iQ0").value);
+          }
+
+          function validaF() {  
+            var estados = document.getElementById("iQ").value;
+            var arrestados = estados.split(",");
+            var final = document.getElementById("iFinal").value;
+            var arrfinal = final.split(",");
+            var estado;
+            var valido=0;
+            for (var i = 0; i < arrfinal.length; i++) {
+              estado = arrfinal[i];
+              for (var j = 0; j < arrestados.length; j++) {
+                if (estado == arrestados[j]) {
+                  valido = 1;
+                  break;
+                }
+                else {
+                  valido = 0;
+                }
+              }
+              if (valido == 0) {
+                break
+              }
+            }
+            if (valido == 0) {
+              window.alert("Estados finales no son validos");
+            }   
+          }
+
+        </script>
+      </body>
+      </html>

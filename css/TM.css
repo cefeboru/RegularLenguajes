@@ -1,0 +1,54 @@
+body { 
+  font: 14px helvetica neue, helvetica, arial, sans-serif;
+}
+
+#cy {
+  height: 300px;
+  width: 100%;
+  border-style: solid;
+  border-width: 1px;
+  
+}
+
+.tmCanvas {
+  display: none;
+  width: 60%;
+  margin: 15px auto 15px auto;
+}
+
+#AcceptedMessage  {
+	display: none;
+	background-color: green;
+}
+
+#DenniedMessage	{
+	display: none;
+	background-color: red;
+}
+
+#TM_Results {
+	padding-top: 25px;
+}
+
+.labelsContainer {
+	padding-top: 15px;
+}
+
+.labelsContainer span {
+	margin-right: 15px;
+}
+
+.tmLabel {
+	display: inline-block;
+	width: 15px;
+	height: 10px;
+	margin-right: 5px;
+}
+
+.rootNodeLabel {
+	background-color: #FFFF00;
+}
+
+.finalNodeLabel {
+	background-color: #DC143C;	
+}
