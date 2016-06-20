@@ -7,12 +7,12 @@
       var F = ["q3"];
       var transiciones = [];
 
-      transiciones.push({ origen:"q1" , destino:"q2" , simbolo:"a" });
+      /*transiciones.push({ origen:"q1" , destino:"q2" , simbolo:"a" });
       transiciones.push({ origen:"q1" , destino:"q3" , simbolo:"b" });
       transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"a" });
       transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"b" });
       transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"a" });
-      transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });
+      transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });*/
 
       function submitData() {
         var alfa = document.getElementById("iA").value;
