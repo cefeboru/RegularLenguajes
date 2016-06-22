@@ -111,7 +111,6 @@
     function LlenarEjemplo() {
       var input = document.getElementById('iQ');
       input.value = input.value +'q1,q2,q3,q4';
-
       validaQ();
       
       var input2 = document.getElementById('iA');
@@ -123,12 +122,52 @@
       var input4 = document.getElementById('iSigma');
       input4.value = input4.value +'(q1:e,e->$:q2);(q2:0,e->0:q2);(q2:1,0->e:q3);(q3:1,0->e:q3);(q3:e,$->e:q4)';
     }
-
-		function Limpiar()
-		{
-			document.getElementById("iQ").value="";
-			document.getElementById("iA").value="";
+    function Limpiar()
+    {
+      document.getElementById("iQ").value="";
+      document.getElementById("iA").value="";
       document.getElementById("iFinal").value="";
-			document.getElementById("iQ0").innerHTML="";
-			document.getElementById("iSigma").value="";
-		}
+      document.getElementById("iQ0").innerHTML="";
+      document.getElementById("iSigma").value="";
+    }
+        function validaQ() {
+            var estados = document.getElementById("iQ").value;
+            var arrestados = estados.split(",");
+            var seleccion = document.getElementById("iQ0");
+            seleccion.length = 0;
+            for (var i = 0; i< arrestados.length ;  i++) {
+                var opcion = document.createElement("option");
+                opcion.text = arrestados[i];
+                seleccion.add(opcion);
+            }
+            //window.alert(document.getElementById("iQ0").value);
+        }
+        function validaF() {  
+            var estados = document.getElementById("iQ").value;
+            var arrestados = estados.split(",");
+            var final = document.getElementById("iFinal").value;
+            var arrfinal = final.split(",");
+            var estado;
+            var valido=0;
+            for (var i = 0; i < arrfinal.length; i++) {
+                estado = arrfinal[i];
+                for (var j = 0; j < arrestados.length; j++) {
+                    if (estado == arrestados[j]) {
+                        valido = 1;
+                        break;
+                    }
+                    else {
+                        valido = 0;
+                    }
+                }
+                if (valido == 0) {
+                    break
+                }
+            }
+            if (valido == 0) {
+                window.alert("Estados finales no son validos");
+            }   
+        }
+    </script>
+  </body>
+</html>
