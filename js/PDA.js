@@ -247,25 +247,23 @@ console.log("test");
 
               if(inputT == "e" && stackElement != "e") {
                 var popElement = stackArray.pop();
+
                 if(stackElement == popElement) {
+
                   logText += 'Inserta "'+pushElement+'" al stack,';
                   if(pushElement != 'e')
                     stackArray.push(pushElement);
                   nodoActual = transicionActual.destino;
                   flag = true;
-                  console.log(1);
+                  
                 } else {
                   stackArray.push(popElement);
                 }
 
-              }
+              } 
 
               if(inputT == input) {
-                
-
-                logText += 'Consume el input '+input+',<br>';
-                logText += 'busca "'+stackElement+'" en el stack,<br>';
-                logText += 'inserta "'+pushElement+'" al stack,';
+        
                 var popElement = stackArray.pop();
                 if(stackElement == popElement) {
                   
@@ -286,6 +284,14 @@ console.log("test");
                 } else {
                   stackArray.push(popElement);
                 }
+
+                logText += 'Consume el input '+input+',<br>';
+                logText += 'busca "'+stackElement+'" en el stack,<br>';
+                logText += 'inserta "'+pushElement+'" al stack,';
+              }
+
+              if(stackElement == "$") {
+                
               }
 
               if(flag) {
@@ -323,10 +329,12 @@ console.log("test");
           var resultDiv;
           if(isFinalState(nodoActual,F)) {
             resultDiv = document.getElementById("AcceptedMessage");
+            document.getElementById("correctString").innerHTML = inputProcesar.value;
           } else {
             resultDiv = document.getElementById("DenniedMessage");
+            document.getElementById("wrongString").innerHTML = inputProcesar.value;
           }
-          document.getElementById("computedString").innerHTML = inputProcesar.value;
+          
           resultDiv.style = "display:block;"
         },4000) 
       });
