@@ -122,6 +122,22 @@
       var input4 = document.getElementById('iSigma');
       input4.value = input4.value +'(q1:e,e->$:q2);(q2:0,e->0:q2);(q2:1,0->e:q3);(q3:1,0->e:q3);(q3:e,$->e:q4)';
     }
+	
+	function LlenarEjemplo2() {
+      var input = document.getElementById('iQ');
+      input.value = input.value +'q1,q2,q3,q4,q5';
+
+      validaQ();
+
+      var input2 = document.getElementById('iA');
+      input2.value = input2.value +'a,b';
+      
+      var input3 = document.getElementById('iFinal');
+      input3.value = input3.value +'q2,q3';
+      
+      var input4 = document.getElementById('iSigma');
+      input4.value = input4.value +'(q1:a:q2);(q1:b:q3);(q2:a:q2);(q2:b:q4);(q4:a:q2);(q4:b:q4);(q3:b:q3);(q3:a:q5);(q5:a:q5);(q5:b:q3)';
+    } 
     function Limpiar()
     {
       document.getElementById("iQ").value="";
