@@ -6,26 +6,16 @@
       var q0 = "q1";
       var F = ["q3"];
       var transiciones = [];
-<<<<<<< HEAD
       validof=0;
       validotra=0;
       /*  
       transiciones.push({ origen:"q1" , destino:"q2" , simbolo:"a" });
-=======
-
-      /*transiciones.push({ origen:"q1" , destino:"q2" , simbolo:"a" });
->>>>>>> origin/master
       transiciones.push({ origen:"q1" , destino:"q3" , simbolo:"b" });
       transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"a" });
       transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"b" });
       transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"a" });
-<<<<<<< HEAD
       transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });
        */ 
-=======
-      transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });*/
-
->>>>>>> origin/master
       function submitData() {
         var alfa = document.getElementById("iA").value;
         var estados = document.getElementById("iQ").value;
