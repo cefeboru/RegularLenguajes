@@ -106,11 +106,9 @@
       input3.value = input3.value +'q4';
       
       var input4 = document.getElementById('iSigma');
-      input4.value = input4.value +'(q1:ε,ε→$:q2);(q2:0,ε→0:q2);(q2:1,0→ε:q3);(q3:1,0→ε:q3);(q3:ε,$→ε:q4)';
+      input4.value = input4.value +'(q1:e,e->$:q2);(q2:0,e->0:q2);(q2:1,0->e:q3);(q3:1,0->e:q3);(q3:e,$->e:q4)';
     }
-  </script>
-  
-    <script type="text/javascript">
+
 		function Limpiar()
 		{
 			document.getElementById("iQ").value="";
@@ -119,9 +117,6 @@
 			document.getElementById("iQ0").innerHTML="";
 			document.getElementById("iSigma").value="";
 		}
-	</script>
-	
-    <script>
 
         function validaQ() {
             var estados = document.getElementById("iQ").value;

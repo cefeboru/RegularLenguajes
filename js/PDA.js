@@ -1,19 +1,10 @@
-//Agregado por AG
-
-
 var Q = ["q1","q2","q3"];
 var Sigma = ["a","b"];
 var q0 = "q1";
 var F = ["q3"];
 var transiciones = [];
-/*
-      transiciones.push({ origen:"q1" , destino:"q2" , simbolo:"a" });
-      transiciones.push({ origen:"q1" , destino:"q3" , simbolo:"b" });
-      transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"a" });
-      transiciones.push({ origen:"q2" , destino:"q2" , simbolo:"b" });
-      transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"a" });
-      transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });
-      */
+
+console.log("test");
 
       function submitData() {
         var alfa = document.getElementById("iA").value;
@@ -124,7 +115,6 @@ var transiciones = [];
       for (var i = Q.length - 1; i >= 0; i--) {
         if(Q[i] !== q0) {
           if( isFinalState(Q[i],F) ) {
-            console.log("Es estado final: " + Q[i]);
             cy.add([
               {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 }, classes: 'final' }
               ]);
@@ -141,7 +131,7 @@ var transiciones = [];
       for (var i = transiciones.length - 1; i >= 0; i--) {
         var transicionActual = transiciones[i];
         var evaluarTransicion = isDuplicated(transicionActual, transiciones, i);
-        console.log(evaluarTransicion);
+        //console.log(evaluarTransicion);
 
         if(evaluarTransicion.duplicated) {
           var index = evaluarTransicion.duplicatedIndex;
@@ -199,14 +189,14 @@ var transiciones = [];
       document.getElementById("headerContainer").style = "display:none;";
       document.getElementById("procesarCadenaForm").style = "display:none;";
       var cadena = document.getElementById("inputProcesar").value;
-      var start = cy.elements("#"+q0);
-      var prevColor = start.style().backgroundColor;
+      var element = cy.elements("#"+q0);
+      var prevColor = element.style().backgroundColor;
 
-      start.animate({ 
+      element.animate({
         style: {backgroundColor: "green"},
         duration:1000
       });
-      start.animate({ 
+      element.animate({ 
         style: {backgroundColor: prevColor},
         duration:1000
       });
@@ -215,61 +205,119 @@ var transiciones = [];
       logElement.innerHTML = "M comienza en el estado " + q0;
       document.getElementById("PDA_Results").appendChild(logElement);
       
+      var stackArray = [];
       var nodoActual = q0;
-      syncLoop(cadena.length, function(loop){  
+      var stringIndex = 0;
+
+      
+      syncLoop(cadena.length+2, function(loop){  
         setTimeout(function(){
+          var flag = false;
           var i = loop.iteration();
 
           for (var j = 0;j <= transiciones.length - 1; j++) {
             var transicionActual = transiciones[j];
 
-            var tempArray = transicionActual.simbolo.split("→");
-            var input = tempArray[0].split(",")[0];
-            var stackElement = tempArray[0].split(",")[0];
+            var tempArray = transicionActual.simbolo.split("->");
+            var inputT = tempArray[0].split(",")[0];
+            var stackElement = tempArray[0].split(",")[1];
             var pushElement = tempArray[1];
 
-            var stackArray = [];
+            var input = cadena[stringIndex];
 
-            if(transicionActual.origen == nodoActual && input === cadena[i]) {
-              if(stackElement == 'ε') {
+            
 
-              } else {
-                var stackSize = stackArray.length;
-                if(stackSize > 0) {}
+            logElement = document.createElement("p");
+            var logText = '';
+
+            console.log(transicionActual.origen +'-'+nodoActual);
+
+            if(transicionActual.origen == nodoActual) {
+
+              if(inputT == "e" && stackElement == "e") {
+                nodoActual = transicionActual.destino;
+                if(pushElement != 'e') {
+                  stackArray.push(pushElement);
+                  logText += 'Inserta "'+pushElement+'" al stack,';
+                  flag = true;
+                  console.log(0);
+                }
+                
               }
 
+              if(inputT == "e" && stackElement != "e") {
+                var popElement = stackArray.pop();
+                if(stackElement == popElement) {
+                  logText += 'Inserta "'+pushElement+'" al stack,';
+                  if(pushElement != 'e')
+                    stackArray.push(pushElement);
+                  nodoActual = transicionActual.destino;
+                  flag = true;
+                  console.log(1);
+                } else {
+                  stackArray.push(popElement);
+                }
 
-              var logElement = document.createElement("p");
-              logElement.innerHTML = "Lee el elemento " + cadena[i]+"<br>";
-              logElement.innerHTML = logElement.innerHTML + "M esta en "+nodoActual
-              +" y se mueve a "+transicionActual.destino;
+              }
 
-              document.getElementById("PDA_Results").appendChild(logElement);
+              if(inputT == input) {
+                
 
-              console.log("Lee el elemento =" + cadena[i]);
-              console.log("M esta en "+nodoActual+" y se mueve a "+transicionActual.destino);
+                logText += 'Consume el input '+input+',<br>';
+                logText += 'busca "'+stackElement+'" en el stack,<br>';
+                logText += 'inserta "'+pushElement+'" al stack,';
+                var popElement = stackArray.pop();
+                if(stackElement == popElement) {
+                  
+                  nodoActual = transicionActual.destino;
+                  stringIndex++;
+                  if(pushElement != 'e') {
+                    stackArray.push(pushElement);
+                  } 
+                  flag = true;
+                  console.log(2);
+                } else if(stackElement = "e"){
+                  nodoActual = transicionActual.destino;
+                  stringIndex++;
+                  stackArray.push(popElement);
+                  stackArray.push(pushElement);
+                  flag = true;
+                  console.log(2);
+                } else {
+                  stackArray.push(popElement);
+                }
+              }
 
-              nodoActual = transicionActual.destino;
-              var element = cy.elements("#"+nodoActual);
-              prevColor = element.style().backgroundColor;
+              if(flag) {
+                var id = nodoActual;
 
-              element.animate( {
-                style: {backgroundColor: "green"},
-                duration:1000
-              });
-              if(i != cadena.length) {
+                //console.log('id:'+id )
+                element = cy.elements('#'+id);
+                logText += 'STACK: '+stackArray.toString() ;
+                logText += '<br>M se encuentra en '+transicionActual.origen+' y mueve al estado '+nodoActual;
+                logElement.innerHTML = logText;
+                //console.log(logText);
+                document.getElementById("PDA_Results").appendChild(logElement);
+
+                prevColor = element.style().backgroundColor;
+
+                element.animate( {
+                  style: {backgroundColor: "green"},
+                  duration:500
+                });
+              
                 element.animate( {
                   style: {backgroundColor: prevColor},
-                  duration:1000
+                  duration:500
                 });  
-              }
-
-              break;
-            }
+                
+                
+                break;
+              } 
+            }   
           };
-
           loop.next();
-        }, 4000);
+        }, 2000);
       }, function(){
         setTimeout(function(){
           var resultDiv;
