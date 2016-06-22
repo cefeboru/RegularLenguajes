@@ -59,10 +59,11 @@
         <label><strong>&delta;</strong> / Escribir lista de 3 tuplas (Origen:Simbolo:Destino) separadas por punto y comas; ejemplo: (q1:0:q2);(q1:1:q1);(q1:0:q2) </label>
         <input class="form-control" type="text" id="iSigma">  
 
-      </div>
-      <button class="btn btn-default" type="submit" id="bDibujar" onclick="submitData();">Dibujar DFA</button>
-	  <button class="btn btn-default" type="submit"  onclick="LlenarEjemplo()" />Llenar Datos</button>
+      </div> 
+      <button class="btn btn-default" type="submit"  onclick="LlenarEjemplo2()" />Llenar Datos (Empieza y termina con misma letra)</button>
+	  <button class="btn btn-default" type="submit"  onclick="LlenarEjemplo()" />Llenar Datos (Binarios multiplo 3)</button>
 	  <button class="btn btn-default" name="agregar" type="image" id="agregar" onclick="Limpiar()" >Limpiar Datos </button>
+    <button class="btn btn-default" type="submit" id="bDibujar" onclick="submitData();">Dibujar DFA</button>
     </div>
 
 
@@ -112,6 +113,21 @@
 			var input4 = document.getElementById('iSigma');
 			input4.value = input4.value +'(q1:0:q1);(q1:1:q2);(q2:0:q3);(q2:1:q1);(q3:0:q2);(q3:1:q3)';
 		}
+    function LlenarEjemplo2() {
+      var input = document.getElementById('iQ');
+      input.value = input.value +'q1,q2,q3,q4,q5';
+
+      validaQ();
+
+      var input2 = document.getElementById('iA');
+      input2.value = input2.value +'a,b';
+      
+      var input3 = document.getElementById('iFinal');
+      input3.value = input3.value +'q2,q3';
+      
+      var input4 = document.getElementById('iSigma');
+      input4.value = input4.value +'(q1:a:q2);(q1:b:q3);(q2:a:q2);(q2:b:q4);(q4:a:q2);(q4:b:q4);(q3:b:q3);(q3:a:q5);(q5:a:q5);(q5:b:q3)';
+    }    
 	</script>
 	
 	<script type="text/javascript">
