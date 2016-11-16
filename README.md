@@ -1,3 +1,3 @@
 # Teoria de la Computación
-Pagina Principal: Index.html
-Libreria para grafos: Cytoscape.js
+<p>Pagina Principal: Index.html</p>
+<p>Libreria para grafos: Cytoscape.js</p>
