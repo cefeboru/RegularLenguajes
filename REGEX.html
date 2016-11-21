@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		
 		<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
@@ -46,12 +47,15 @@
 			<input id="cadena" class="form-control" type="text" /><br><br>
 		</div>
 		<div>
-			<button onclick="verificar_regex()">OK</button>
+			<button class="btn btn-default" type="submit" onclick="verificar_regex()">Verificar</button>
+			<button class="btn btn-default" type="submit" onclick="stringAleatorio()">Random</button>
+			<button class="btn btn-default" name="agregar" type="image" id="agregar" onclick="Limpiar()" >Limpiar Datos </button>
 		</div>
+		
 		<div>
 			<label id="resultado"></label>
 		</div>
-		<script>
+		<script type="text/javascript">
 			function verificar_regex()
 			{
 				var regex = document.getElementById("regex").value;
@@ -65,7 +69,25 @@
 			}
 		</script>
 		
-		
-    
+		<script type="text/javascript">
+			function stringAleatorio()
+			{
+				var chars = "abc";
+				 var string_length = 4;
+				 var randomstring = document.getElementById('cadena');;
+				 for (var i=0; i<string_length; i++) {
+				  var rnum = Math.floor(Math.random() * chars.length);
+				  randomstring.value += chars.substring(rnum,rnum+1);
+				 }
+				 document.randform.randomfield.value = randomstring;
+			}
+		</script>   
+		<script type="text/javascript">
+		function Limpiar()
+		{
+			document.getElementById("regex").value="";
+			document.getElementById("cadena").value="";
+		}
+	</script>
 	</body>
 </html>
