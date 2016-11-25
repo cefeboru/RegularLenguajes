@@ -8,7 +8,8 @@
 		<title>Teoria de la Computación</title>
 
 		<!-- Main CSS -->
-		<link href="css/REGEX.css" rel="stylesheet">
+		 <link href="css/DFA.css" rel="stylesheet">
+		<!--link href="css/REGEX.css" rel="stylesheet">
 		<!-- Bootstrap -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 
@@ -22,8 +23,21 @@
 
 
 	<body>
+	 <nav class="navbar navbar-default">
+		  <div class="container-fluid">
+			<div class="navbar-header">
+			  <a class="navbar-brand" href="#">Teoria de la Computacion</a>
+			</div>
+			<ul class="nav navbar-nav">
+			  <li class="active"><a href="./index.html">index</a></li>
+			  <li><a href="./DFA.html">DFA</a></li>
+			  <li><a href="./PDA.html">PDA</a></li> 
+			  <li><a href="./TM.html">TM</a></li> 
+			</ul>
+		  </div>
+	</nav>
 		<div class="container">
-		<div class="header">
+		<div class="headerContainer">
 		  <h1 align="center">Expresiones Regulares</h1>
 		  <p>Las <strong>Expresiones Regulares</strong> se usan para analizar el contenido de cadenas de caracteres por medio de patrones. Son muy útiles y por ello deberéis aprender a definir vuestros propios patrones. </p>
 		  <h2>Definición formal</h2>
@@ -39,6 +53,7 @@
 		</div>
 		
 		<div>
+		 <label>Escriba expresiones regulares, ejemplo: a+b*, a*b*, a*b*bbc, [a|b]</label><br>
 			<label for="regex">Regex:</label>
 			<input id="regex" class="form-control" type="text" /><br><br>
 		</div>
@@ -48,13 +63,46 @@
 		</div>
 		<div>
 			<button class="btn btn-default" type="submit" onclick="verificar_regex()">Verificar</button>
-			<button class="btn btn-default" type="submit" onclick="stringAleatorio()">Random</button>
+			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo()">LlenarEjemplo1</button>
+			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo2()">LlenarEjemplo2</button>
+			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo3()">LlenarEjemplo3</button>
+			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo4()">LlenarEjemplo4</button><br>
 			<button class="btn btn-default" name="agregar" type="image" id="agregar" onclick="Limpiar()" >Limpiar Datos </button>
+			<button class="btn btn-default" type="submit" id="bDibujar" onclick="submitData();">Dibujar DFA</button>
 		</div>
 		
 		<div>
 			<label id="resultado"></label>
 		</div>
+		
+		<div class="dfaCanvas">
+		  <div id="cy"></div>
+		  <div class="labelsContainer">
+			<div class="dfaLabel rootNodeLabel"></div><span>Estado Inicial</span>
+			<div class="dfaLabel finalNodeLabel"></div><span>Estado Final</span>
+		  </div>
+		  <div id="procesarCadenaForm">
+			<div class="form-group"><label>Procesar Cadena: </label><input id="inputProcesar" class="form-control" type="text"/></div>
+			<div class="form-group"><button class="btn btn-default" type="submit" id="btnProcesar" onclick="procesarCadena();">Procesar Cadena</button><button onclick="getBackForm()" class="btn btn-default">Volver</button></div>
+		  </div>
+		  <div id="DFA_Results"></div>
+			<div id="AcceptedMessage">
+			  <span style="color:green;">M se encuetra en un estado final, por lo cua M acepta la cadena "<span id="correctString"></span>"</span>
+			  <button onclick="getBack()" class="btn btn-default">Volver</button>
+			</div>
+			<div id="DenniedMessage">
+			  <span style="color:red;">M no se encuetra en un estado final, por lo cua M no acepta la cadena "<span id="wrongString"></span>"</span>
+			  <button onclick="getBack()" class="btn btn-default">Volver</button>
+			</div>
+        </div>
+		
+			<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/cytoscape.min.js"></script>
+		<script src="js/DFA.js"></script>
+		
 		<script type="text/javascript">
 			function verificar_regex()
 			{
@@ -70,24 +118,61 @@
 		</script>
 		
 		<script type="text/javascript">
-			function stringAleatorio()
+			function LlenarEjemplo() {
+				var input = document.getElementById('regex');
+				input.value = input.value +'a+b*';
+				
+				var input2 = document.getElementById('cadena');
+			    input2.value = input2.value +'abb';
+
+			}
+			function LlenarEjemplo2() {
+				var input = document.getElementById('regex');
+				input.value = input.value +'ab*';
+				
+				var input2 = document.getElementById('cadena');
+			    input2.value = input2.value +'bbbbb';
+
+			}
+			function LlenarEjemplo3() {
+				var input = document.getElementById('regex');
+				input.value = input.value +'a*b*bbc';
+				
+				var input2 = document.getElementById('cadena');
+			    input2.value = input2.value +'bbc';
+
+			}
+			function LlenarEjemplo4() {
+				var input = document.getElementById('regex');
+				input.value = input.value +'[a|b]';
+				
+				var input2 = document.getElementById('cadena');
+			    input2.value = input2.value +'abbbbaa';
+
+			}
+			/*function stringAleatorio()
 			{
-				var chars = "abc";
+				 var chars = "abc";
 				 var string_length = 4;
-				 var randomstring = document.getElementById('cadena');;
+				 var randomstring = document.getElementById("cadena");
+				 
 				 for (var i=0; i<string_length; i++) {
 				  var rnum = Math.floor(Math.random() * chars.length);
 				  randomstring.value += chars.substring(rnum,rnum+1);
 				 }
+				 
 				 document.randform.randomfield.value = randomstring;
-			}
+			}*/
 		</script>   
 		<script type="text/javascript">
-		function Limpiar()
-		{
-			document.getElementById("regex").value="";
-			document.getElementById("cadena").value="";
-		}
-	</script>
+			function Limpiar()
+			{
+				document.getElementById("regex").value="";
+				document.getElementById("cadena").value="";
+				//document.getElementById("resultado").value="";
+			}
+		</script>
+		
+	
 	</body>
 </html>
