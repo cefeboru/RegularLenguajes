@@ -110,10 +110,16 @@
 				var pattern = new RegExp(regex);
 				var cadena = document.getElementById("cadena").value;
 				
-				if (pattern.test(cadena))
-					document.getElementById("resultado").innerHTML = "Acepta";
-				else
-					document.getElementById("resultado").innerHTML = "Rechaza";
+				var capturedString = pattern.exec(cadena)[0];
+				
+				if(capturedString != null) {
+					if(capturedString.length != cadena.length) {
+						document.getElementById("resultado").innerHTML = "Rechaza";
+					} else {
+						document.getElementById("resultado").innerHTML = "Acepta";
+					}
+				}
+
 			}
 		</script>
 		
