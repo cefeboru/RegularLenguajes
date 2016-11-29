@@ -84,7 +84,7 @@
           <div id="cy"></div>
           <div class="labelsContainer">
             <div class="pdaLabel rootNodeLabel"></div><span>Estado Inicial</span>
-            <div class="pdaLabel finalNodeLabel"></div><span>Estado Final</span>
+            <span style="font-size:25px;">&#x25CB;</span><span>Estado Final</span>
           </div>
           <div id="procesarCadenaForm">
             <div class="form-group"><label>Procesar Cadena: </label><input id="inputProcesar" class="form-control" type="text"/></div>
@@ -112,17 +112,17 @@
   <script type="text/javascript">
     function LlenarEjemplo() {
       var input = document.getElementById('iQ');
-      input.value = 's0, s1, s2, s3, s4';
+      input.value = 's1, s2';
       validaQ();
       
       var input2 = document.getElementById('iA');
       input2.value = '0,1';
       
       var input3 = document.getElementById('iFinal');
-      input3.value = 's1, s3';
+      input3.value = 's1';
       
       var input4 = document.getElementById('iSigma');
-      input4.value = '(s0:e, {s1, s2}); (s1:0, {s2}); (s1:1, {s1}); (s2:0, {s1})';
+      input4.value = '(s1:1, {s1}); (s1:0, {s2}); (s2:0, {s1}); (s2:1, {s2})';
     }
     function Limpiar()
     {

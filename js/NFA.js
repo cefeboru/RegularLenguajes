@@ -11,7 +11,17 @@ var CyNodes = [];
         var trans = document.getElementById("iSigma").value;
         
         Q = estados.split(",");
+
+        //Trim all states
+        for (var i = Q.length - 1; i >= 0; i--) {
+          Q[i] = Q[i].trim();
+        };
+
         Sigma = alfa.split(",");
+        for (var i = Sigma.length - 1; i >= 0; i--) {
+          Sigma[i] = Sigma[i].trim();
+        };
+
         transarr = trans.split(";")
 
         if (estados.length == 0) {
@@ -65,7 +75,7 @@ var CyNodes = [];
             q0 = document.getElementById("iQ0").value.trim();
             F = document.getElementById("iFinal").value.split(",");
             document.getElementsByClassName("formulario")[0].style = "display:none;"
-            dibujarPDA();
+            dibujarNFA();
           }
         }
       }
@@ -73,7 +83,7 @@ var CyNodes = [];
 
       var cy;//Cytoscape CORE
 
-      function dibujarPDA() {
+      function dibujarNFA() {
        //INICIALIZACIÓN DE CYTOSCAPE
        cy = cytoscape({
          container: document.getElementById('cy'),
@@ -87,7 +97,8 @@ var CyNodes = [];
            css: {
              'content': 'data(id)',
              'text-valign': 'center',
-             'text-halign': 'center'
+             'text-halign': 'center',
+             'background-color': '#DFDFDF'
            }
          },
          {
@@ -100,8 +111,7 @@ var CyNodes = [];
          {
            selector: '.final',
            css: {
-             'content': 'data(id)',
-             'background-color': '#DC143C'
+             'borderWidth':'2'
            }
          },
          {
@@ -109,7 +119,7 @@ var CyNodes = [];
            css: {
              'label': 'data(label)',
              'width': 3,
-             'line-color': '#ccc',
+             'line-color': '#CCCCCC',
              'target-arrow-shape': 'triangle'
            }
          },
@@ -122,7 +132,8 @@ var CyNodes = [];
              'source-arrow-color': 'black'
            }
          }
-         ],          
+         ],
+
          layout: {
            name: 'preset',
            padding: 5
@@ -137,18 +148,26 @@ var CyNodes = [];
 
       //CREACIÓN DE NODOS
       for (var i = Q.length - 1; i >= 0; i--) {
-        if(Q[i] !== q0) {
-          if( isFinalState(Q[i],F) ) {
-            cy.add([
-              {group:"nodes", data:{ id : Q[i].trim() } , position: { x: Math.random()*300, y: Math.random()*300 }, classes: 'final' }
-              ]);
+        //if(Q[i] !== q0) {
+          var finalState = isFinalState(Q[i],F);
+          console.log(finalState);
+          if( finalState ) {
+            var tempNode = cy.$("#"+Q[i])
+
+            if(tempNode) {
+              tempNode.addClass("final");
+            } else {
+              cy.add([
+                {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 } }
+                ]);  
+            }
           } else {
             cy.add([
-              {group:"nodes", data:{ id : Q[i].trim() } , position: { x: Math.random()*300, y: Math.random()*300 } }
+              {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 } }
               ]);  
           }
           
-        }
+        //}
       };
       
       //CREACIÓN DE TRANSICIONES
@@ -180,6 +199,19 @@ var CyNodes = [];
         }
       };
 
+      /*var options = {
+        name: 'random',
+
+        fit: true, // whether to fit to viewport
+        padding: 30, // fit padding
+        boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
+        animate: false, // whether to transition the node positions
+        animationDuration: 500, // duration of animation in ms if enabled
+        animationEasing: undefined, // easing of animation if enabled
+        ready: undefined, // callback on layoutready
+        stop: undefined // callback on layoutstop
+      };*/
+
       //MOSTRAR PDA
       document.getElementsByClassName("pdaCanvas")[0].style = "display: block;"
     }
@@ -200,7 +232,9 @@ var CyNodes = [];
     }
 
     function isFinalState(estado, F) {
+
       for (var i = F.length - 1; i >= 0; i--) {
+        console.log("Comparando '"+estado+"' con '"+F[i]+"'");
         if(estado == F[i]) {
           return true;
         }
