@@ -28,9 +28,10 @@ var CyNodes = [];
 
             try{
 
-              for (var i = 0; i >= 0; i--) {
+              for (var i = 0; i < transarr.length; i++) {
                 //Split in Qi:a and Qj
                 var arr = transarr[i].split(",");
+                console.log(transarr[i]);
                 //Split in Node and Alphabet Symbol
                 var param1 = arr[0].split(':');
                 var fromNode = param1[0].split('(')[1];//Remove the initial '('
@@ -39,10 +40,11 @@ var CyNodes = [];
 
                 var regexVar = /\{(.*)\}/;//Get the string inside {}
                 var regexExec = regexVar.exec(transarr[i]);
-                if(regexExec.length > 1) {
+                console.log("Regex Match: " + regexExec[1]);
+                if(regexExec.length > 1) {//If there is a match inside {} the array will be at least size 2
                   var capturedString = regexExec[1].split(',');
-                  for (var i = capturedString.length - 1; i >= 0; i--) {
-                    var toNode = capturedString[i];
+                  for( var j= 0; j < capturedString.length; j++){
+                    var toNode = capturedString[j];
                     console.log("Origen:" + fromNode);
                     console.log("Destino:" + toNode);
                     console.log("Symbolo:" + alphabetSymbol);
@@ -51,6 +53,7 @@ var CyNodes = [];
                       destino:toNode.trim(), 
                       simbolo:alphabetSymbol.trim() 
                     });
+                    console.log("--------------------------------------");
                   }
                 }
               }
@@ -129,7 +132,7 @@ var CyNodes = [];
       //NODO Q0
 
       CyNodes.push(cy.add([
-        { group: "nodes", data: { id: q0 }, position: {x: 145, y: 50}, classes: 'root' }
+        { group: "nodes", data: { id: q0.trim() }, position: {x: 145, y: 50}, classes: 'root' }
         ]));
 
       //CREACIÓN DE NODOS
