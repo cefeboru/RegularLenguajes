@@ -107,7 +107,7 @@
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/cytoscape.min.js"></script>
-		<!--script src="js/DFA.js"></script-->
+		<script src="js/NFA.js"></script>
 		
 		<script type="text/javascript">
 			function Convertir()
@@ -129,128 +129,7 @@
 			}
 			
 			
-			function DibujarNFA()
-			{
-				 cy = cytoscape({
-				 container: document.getElementById('cy'),
-				 
-				 boxSelectionEnabled: false,
-				 autounselectify: true,
-				 
-				 style: [
-				   {
-					 selector: 'node',
-					 css: {
-					   'content': 'data(id)',
-					   'text-valign': 'center',
-					   'text-halign': 'center'
-					 }
-				   },
-				   {
-					 selector: '.root',
-					 css: {
-					   'content': 'data(id)',
-					   'background-color': '#FFFF00'
-					 }
-				   },
-				   {
-					 selector: '.final',
-					 css: {
-					   'content': 'data(id)',
-					   'background-color': '#DC143C'
-					 }
-				   },
-				   {
-					 selector: 'edge',
-					 css: {
-					   'label': 'data(label)',
-					   'width': 3,
-					   'line-color': '#ccc',
-					   'target-arrow-shape': 'triangle'
-					 }
-				   },
-				   {
-					 selector: ':selected',
-					 css: {
-					   'background-color': 'black',
-					   'line-color': 'black',
-					   'target-arrow-color': 'black',
-					   'source-arrow-color': 'black'
-					 }
-				   }
-				 ],          
-				layout: {
-				   name: 'preset',
-				   padding: 5
-				}
-			  });
-			  
-			  //NODO Q0
-
-			  cy.add([
-				{ group: "nodes", data: { id: q0 }, position: {x: 145, y: 50}, classes: 'root' }
-			  ]);
-
-			  //CREACIÓN DE NODOS
-			  for (var i = Q.length - 1; i >= 0; i--) {
-				if(Q[i] !== q0) {
-				  if( isFinalState(Q[i],F) ) {
-					console.log("Es estado final: " + Q[i]);
-					cy.add([
-					  {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 }, classes: 'final' }
-					]);
-				  } else {
-					cy.add([
-					  {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 } }
-					]);  
-				  }
-				  
-				}
-			  };
-			  
-			  //CREACIÓN DE TRANSICIONES
-			  for (var i = transiciones.length - 1; i >= 0; i--) {
-				var transicionActual = transiciones[i];
-				var evaluarTransicion = isDuplicated(transicionActual, transiciones, i);
-				console.log(evaluarTransicion);
-
-				if(evaluarTransicion.duplicated) {
-				  var index = evaluarTransicion.duplicatedIndex;
-				  var edgeId = transicionActual.origen.concat("-").concat(transicionActual.destino);
-				  var edgeSigmaSymbol = transicionActual.simbolo.concat(",").concat(transiciones[index].simbolo);
-				  cy.add({
-					group: "edges",
-					data: {
-					  id: edgeId, source: transicionActual.origen, target: transicionActual.destino, label: edgeSigmaSymbol
-					}
-				  });
-				  transiciones[i].duplicated = true;
-
-				} else if(! transiciones[i].duplicated) {
-				  var edgeId = transicionActual.origen.concat("-").concat(transicionActual.destino);
-				  var edgeSigmaSymbol = transicionActual.simbolo;
-				  cy.add([{
-					group: "edges",
-					data: {
-					 id: edgeId, source: transicionActual.origen, target: transicionActual.destino, label: edgeSigmaSymbol 
-					}
-				  }]);
-				}
-			  };
-			  /*cy.add([{ 
-						group: "edges", 
-						data: { 
-						  id: EdgeId, source: transicionActual.origen, target: transicionActual.destino, label: alphabetSymbol
-						}
-			  }]);*/
-
-
-				//TODO
-			  //MOSTRAR DFA
-			  document.getElementsByClassName("dfaCanvas")[0].style = "display: block;"
-			 
-
-			}
+			
 		</script>
 		
 		<script type="text/javascript">
