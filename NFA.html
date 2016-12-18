@@ -90,7 +90,7 @@
             <div class="form-group"><label>Procesar Cadena: </label><input id="inputProcesar" class="form-control" type="text"/></div>
             <div class="form-group"><button class="btn btn-default" type="submit" id="btnProcesar" onclick="procesarCadena();">Procesar Cadena</button></div>
           </div>
-          <div id="PDA_Results"></div>
+          <div id="NFA_Results"></div>
           <div id="AcceptedMessage">
             M se encuetra en un estado final, por lo cua M acepta la cadena "<span id="correctString"></span>"
           </div>
@@ -107,68 +107,70 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/cytoscape.min.js"></script>
-    <script src="js/NFA.js"></script>
+    <script src="js/NFA_2.js"></script>
   
   <script type="text/javascript">
     function LlenarEjemplo() {
       var input = document.getElementById('iQ');
-      input.value = 's1, s2';
+      input.value = 'q0, q1, q2';
       validaQ();
       
       var input2 = document.getElementById('iA');
       input2.value = '0,1';
       
       var input3 = document.getElementById('iFinal');
-      input3.value = 's1';
+      input3.value = 'q2';
       
       var input4 = document.getElementById('iSigma');
-      input4.value = '(s1:1, {s1}); (s1:0, {s2}); (s2:0, {s1}); (s2:1, {s2})';
+      input4.value = '(q0:1, {q0}); (q0:0, {q0}); (q0:0, {q1}); (q1:1, {q2})';
     }
-    function Limpiar()
-    {
+
+    function Limpiar() {
       document.getElementById("iQ").value="";
       document.getElementById("iA").value="";
       document.getElementById("iFinal").value="";
       document.getElementById("iQ0").innerHTML="";
       document.getElementById("iSigma").value="";
     }
-        function validaQ() {
-            var estados = document.getElementById("iQ").value;
-            var arrestados = estados.split(",");
-            var seleccion = document.getElementById("iQ0");
-            seleccion.length = 0;
-            for (var i = 0; i< arrestados.length ;  i++) {
-                var opcion = document.createElement("option");
-                opcion.text = arrestados[i];
-                seleccion.add(opcion);
-            }
+
+    function validaQ() {
+        var estados = document.getElementById("iQ").value;
+        var arrestados = estados.split(",");
+        var seleccion = document.getElementById("iQ0");
+        seleccion.length = 0;
+        for (var i = 0; i< arrestados.length ;  i++) {
+            var opcion = document.createElement("option");
+            opcion.text = arrestados[i];
+            seleccion.add(opcion);
         }
-        function validaF() {  
-            var estados = document.getElementById("iQ").value;
-            var arrestados = estados.split(",");
-            var final = document.getElementById("iFinal").value;
-            var arrfinal = final.split(",");
-            var estado;
-            var valido=0;
-            for (var i = 0; i < arrfinal.length; i++) {
-                estado = arrfinal[i];
-                for (var j = 0; j < arrestados.length; j++) {
-                    if (estado == arrestados[j]) {
-                        valido = 1;
-                        break;
-                    }
-                    else {
-                        valido = 0;
-                    }
+    }
+        
+    function validaF() {  
+        var estados = document.getElementById("iQ").value;
+        var arrestados = estados.split(",");
+        var final = document.getElementById("iFinal").value;
+        var arrfinal = final.split(",");
+        var estado;
+        var valido=0;
+        for (var i = 0; i < arrfinal.length; i++) {
+            estado = arrfinal[i];
+            for (var j = 0; j < arrestados.length; j++) {
+                if (estado == arrestados[j]) {
+                    valido = 1;
+                    break;
                 }
-                if (valido == 0) {
-                    break
+                else {
+                    valido = 0;
                 }
             }
             if (valido == 0) {
-                window.alert("Estados finales no son validos");
-            }   
+                break
+            }
         }
+        if (valido == 0) {
+            window.alert("Estados finales no son validos");
+        }   
+    }
     </script>
   </body>
 </html>

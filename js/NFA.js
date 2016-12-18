@@ -34,14 +34,12 @@ var CyNodes = [];
           }
           else {
             transarr = trans.split(";");//Split the transicions
-            console.log(transarr.length);
 
             try{
 
               for (var i = 0; i < transarr.length; i++) {
                 //Split in Qi:a and Qj
                 var arr = transarr[i].split(",");
-                console.log(transarr[i]);
                 //Split in Node and Alphabet Symbol
                 var param1 = arr[0].split(':');
                 var fromNode = param1[0].split('(')[1];//Remove the initial '('
@@ -50,20 +48,20 @@ var CyNodes = [];
 
                 var regexVar = /\{(.*)\}/;//Get the string inside {}
                 var regexExec = regexVar.exec(transarr[i]);
-                console.log("Regex Match: " + regexExec[1]);
+                //console.log("Regex Match: " + regexExec[1]);
                 if(regexExec.length > 1) {//If there is a match inside {} the array will be at least size 2
                   var capturedString = regexExec[1].split(',');
                   for( var j= 0; j < capturedString.length; j++){
                     var toNode = capturedString[j];
-                    console.log("Origen:" + fromNode);
-                    console.log("Destino:" + toNode);
-                    console.log("Symbolo:" + alphabetSymbol);
+                    //console.log("Origen: '" + fromNode + "'");
+                    //console.log("Destino: '" + toNode + "'");
+                    //console.log("Symbolo: '" + alphabetSymbol + "'");
                     transiciones.push({   
                       origen: fromNode.trim(), 
                       destino:toNode.trim(), 
                       simbolo:alphabetSymbol.trim() 
                     });
-                    console.log("--------------------------------------");
+                    //console.log("--------------------------------------");
                   }
                 }
               }
@@ -143,31 +141,51 @@ var CyNodes = [];
       //NODO Q0
 
       CyNodes.push(cy.add([
-        { group: "nodes", data: { id: q0.trim() }, position: {x: 145, y: 50}, classes: 'root' }
+        { 
+          group: "nodes", 
+          data: { id: q0.trim() }, 
+          position: { x: 145, y: 50 }, 
+          classes: 'root' }
         ]));
 
       //CREACIÓN DE NODOS
+      console.log("Creando Nodos");
       for (var i = Q.length - 1; i >= 0; i--) {
-        //if(Q[i] !== q0) {
-          var finalState = isFinalState(Q[i],F);
-          console.log(finalState);
-          if( finalState ) {
-            var tempNode = cy.$("#"+Q[i])
+        console.log("   Iterarion: " + i);
+        var currentNode = Q[i].trim();
+        console.log("   currentNode: " + currentNode);
+        if(currentNode != q0.trim()) {
 
-            if(tempNode) {
+          var finalState = isFinalState(currentNode,F);
+          console.log("   Is final state? " + finalState);
+
+          if( finalState ) {
+            //Does it already exist?
+            var tempNode = cy.$("#"+currentNode);
+
+            if(tempNode.length > 0) {
+              //If exists just add the final class
               tempNode.addClass("final");
             } else {
-              cy.add([
-                {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 } }
-                ]);  
+              //Add the new node if it does not exist
+              var ele = cy.add([{
+                group:"nodes", 
+                data:{ id : currentNode } , 
+                position: { x: Math.random()*300, y: Math.random()*300 }
+              }]);
+              ele.addClass("final")  
             }
           } else {
             cy.add([
-              {group:"nodes", data:{ id : Q[i] } , position: { x: Math.random()*300, y: Math.random()*300 } }
-              ]);  
+              {
+                group:"nodes", 
+                data:{ id : currentNode } , 
+                position: { x: Math.random()*300, y: Math.random()*300 } 
+              }
+            ]);  
           }
           
-        //}
+        }
       };
       
       //CREACIÓN DE TRANSICIONES
@@ -182,7 +200,10 @@ var CyNodes = [];
           cy.add({
             group: "edges",
             data: {
-              id: edgeId, source: transicionActual.origen, target: transicionActual.destino, label: edgeSigmaSymbol
+              id: edgeId, 
+              source: transicionActual.origen, 
+              target: transicionActual.destino, 
+              label: edgeSigmaSymbol
             }
           });
           transiciones[i].duplicated = true;
@@ -193,26 +214,16 @@ var CyNodes = [];
           cy.add([{
             group: "edges",
             data: {
-             id: edgeId, source: transicionActual.origen, target: transicionActual.destino, label: edgeSigmaSymbol 
-           }
+             id: edgeId, 
+             source: transicionActual.origen, 
+             target: transicionActual.destino, 
+             label: edgeSigmaSymbol 
+            }
          }]);
         }
       };
 
-      /*var options = {
-        name: 'random',
-
-        fit: true, // whether to fit to viewport
-        padding: 30, // fit padding
-        boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
-        animate: false, // whether to transition the node positions
-        animationDuration: 500, // duration of animation in ms if enabled
-        animationEasing: undefined, // easing of animation if enabled
-        ready: undefined, // callback on layoutready
-        stop: undefined // callback on layoutstop
-      };*/
-
-      //MOSTRAR PDA
+      //MOSTRAR NFA
       document.getElementsByClassName("pdaCanvas")[0].style = "display: block;"
     }
 
@@ -234,7 +245,6 @@ var CyNodes = [];
     function isFinalState(estado, F) {
 
       for (var i = F.length - 1; i >= 0; i--) {
-        console.log("Comparando '"+estado+"' con '"+F[i]+"'");
         if(estado == F[i]) {
           return true;
         }
@@ -242,10 +252,54 @@ var CyNodes = [];
       return false;
     }
 
+    function treeNode(parent) {
+      this.childs = [];
+      this.parent = parent;
+      this.node = "";
+      this.edgeIn = ""
+      this.edgeOut = ""
+    }
+
+    function treeEdge() {
+      this.origin = "";
+      this.target = "";
+      this.character = "";
+    }
+
+    var treeRoot = new treeNode();
+
+    function createChilds(currentNode, cadena) {
+        var possiblePaths = cy.edges("[source='"+ currentNode.node +"']");
+
+        console.log("Cadena: " + cadena + " Node: " + currentNode.node + " Paths: " + possiblePaths.length);
+        for( var i=0; i < possiblePaths.length; i++ ) {
+          var edge = possiblePaths[i].data();
+          
+          if(cadena.length > 0 && edge.label == cadena[0] ) {
+
+            node.edgeOut = edge;
+            
+            var childNode = new treeNode()
+            childNode.parent = node;
+            childNode.edgeIn = edge;
+            currentNode.childs.push(childNode)
+            var newString = cadena.slice(1,cadena.length);
+            reuse(childNode, newString);
+
+          } else if(char == "e"){
+            //TODO EPSILON
+          }
+        } 
+      }
+
     function procesarCadena() {
+
+
+
       document.getElementById("headerContainer").style = "display:none;";
       document.getElementById("procesarCadenaForm").style = "display:none;";
       var cadena = document.getElementById("inputProcesar").value;
+      calcPaths(cadena);
       var element = cy.elements("#"+q0);
       var prevColor = element.style().backgroundColor;
 
@@ -272,121 +326,16 @@ var CyNodes = [];
           var flag = false;
           var i = loop.iteration();
 
-          for (var j = 0;j <= transiciones.length - 1; j++) {
-            var transicionActual = transiciones[j];
-
-            var tempArray = transicionActual.simbolo.split("->");
-            var inputT = tempArray[0].split(",")[0];
-            var stackElement = tempArray[0].split(",")[1];
-            var pushElement = tempArray[1];
-
-            var input = cadena[stringIndex];
-
-            
-
-            logElement = document.createElement("p");
-            var logText = '';
-
-            console.log(transicionActual.origen +'-'+nodoActual);
-
-            if(transicionActual.origen == nodoActual) {
-
-              if(inputT == "e" && stackElement == "e") {
-                nodoActual = transicionActual.destino;
-                if(pushElement != 'e') {
-                  stackArray.push(pushElement);
-                  logText += 'Inserta "'+pushElement+'" al stack,';
-                  flag = true;
-                  console.log(0);
-                }
-                
-              }
-
-              if(inputT == "e" && stackElement != "e") {
-                var popElement = stackArray.pop();
-
-                if(stackElement == popElement) {
-
-                  logText += 'Inserta "'+pushElement+'" al stack,';
-                  if(pushElement != 'e')
-                    stackArray.push(pushElement);
-                  nodoActual = transicionActual.destino;
-                  flag = true;
-                  
-                } else {
-                  stackArray.push(popElement);
-                }
-
-              } 
-
-              if(inputT == input) {
-        
-                var popElement = stackArray.pop();
-                if(stackElement == popElement) {
-                  
-                  nodoActual = transicionActual.destino;
-                  stringIndex++;
-                  if(pushElement != 'e') {
-                    stackArray.push(pushElement);
-                  } 
-                  flag = true;
-                  console.log(2);
-                } else if(stackElement = "e"){
-                  nodoActual = transicionActual.destino;
-                  stringIndex++;
-                  stackArray.push(popElement);
-                  stackArray.push(pushElement);
-                  flag = true;
-                  console.log(2);
-                } else {
-                  stackArray.push(popElement);
-                }
-
-                logText += 'Consume el input '+input+',<br>';
-                logText += 'busca "'+stackElement+'" en el stack,<br>';
-                logText += 'inserta "'+pushElement+'" al stack,';
-              }
-
-              if(stackElement == "$") {
-                
-              }
-
-              if(flag) {
-                var id = nodoActual;
-
-                //console.log('id:'+id )
-                element = cy.elements('#'+id);
-                logText += 'STACK: '+stackArray.toString() ;
-                logText += '<br>M se encuentra en '+transicionActual.origen+' y mueve al estado '+nodoActual;
-                logElement.innerHTML = logText;
-                //console.log(logText);
-                document.getElementById("PDA_Results").appendChild(logElement);
-
-                prevColor = element.style().backgroundColor;
-
-                element.animate( {
-                  style: {backgroundColor: "green"},
-                  duration:500
-                });
-              
-                element.animate( {
-                  style: {backgroundColor: prevColor},
-                  duration:500
-                });  
-                
-                
-                break;
-              } 
-            }   
-          };
           loop.next();
         }, 2000);
       }, function(){
         setTimeout(function(){
           var resultDiv;
+
           if(isFinalState(nodoActual,F)) {
             resultDiv = document.getElementById("AcceptedMessage");
             document.getElementById("correctString").innerHTML = inputProcesar.value;
+
           } else {
             resultDiv = document.getElementById("DenniedMessage");
             document.getElementById("wrongString").innerHTML = inputProcesar.value;
@@ -398,7 +347,7 @@ var CyNodes = [];
 
     }
 
-    function syncLoop(iterations, process, exit){  
+    function syncLoop(iterations, process, exit) {  
       var index = 0,
       done = false,
       shouldExit = false;
@@ -430,4 +379,3 @@ var CyNodes = [];
             loop.next();
             return loop;
           }
-

@@ -18,12 +18,13 @@ body {
 
 #AcceptedMessage  {
 	display: none;
-	background-color: green;
+	color: green;
+	font-weight: bold;
 }
 
 #DenniedMessage	{
 	display: none;
-	background-color: red;
+	color: red;
 }
 
 #PDA_Results {
