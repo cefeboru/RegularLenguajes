@@ -94,14 +94,16 @@ div#pda_inputs {
 }
 
 div#inputAnimation {
-    top: 0px;
+    position: relative;
+    top: 15%;
     right: 0;
     font-size: xx-large;
     color: blue;
     font-family: Arial;
     text-align: -webkit-center;
     display: flex;
-    margin-right: 570px;
+    margin-right: auto;
+    width: auto;
 }
 
 .info {
