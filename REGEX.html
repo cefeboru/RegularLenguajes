@@ -12,6 +12,8 @@
 		<!--link href="css/REGEX.css" rel="stylesheet">
 		<!-- Bootstrap -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<script src="js/cytoscape.min.js"></script>
+		<script src="js/NFA.js"></script>
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -31,8 +33,10 @@
 		    <ul class="nav navbar-nav">
 		      <li ><a href="./index.html">Menu</a></li>
 		      <li><a href="./DFA.html">DFA</a></li>
-		      <li class="active"><a href="./REGEX.html">Regex</a></li>
+		      <li><a href="./NFA.html">NFA</a></li>
+		      <li class="active"><a href="./REGEX.html">REGEX</a></li>
 		      <li><a href="./PDA.html">PDA</a></li> 
+		      <li><a href="./TM.html">TM</a></li>
 		    </ul>
 		  </div>
 		</nav>
@@ -70,7 +74,7 @@
 			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo3()">LlenarEjemplo3</button>
 			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo4()">LlenarEjemplo4</button><br>
 			<button class="btn btn-default" name="agregar" type="image" id="agregar" onclick="Limpiar()" >Limpiar Datos </button>
-			<button class="btn btn-default" type="submit" id="bDibujar" onclick="submitData();">Dibujar NFA</button>
+			<button class="btn btn-default" type="submit" id="bDibujar" onclick="submitDataNFA();">Dibujar NFA</button>
 		</div>
 		
 		<div>
@@ -89,11 +93,11 @@
 		  </div>
 		  <div id="DFA_Results"></div>
 			<div id="AcceptedMessage">
-			  <span style="color:green;">M se encuetra en un estado final, por lo cua M acepta la cadena "<span id="correctString"></span>"</span>
+			  <span style="color:green;">M se encuetra en un estado final, por lo cual M acepta la cadena "<span id="correctString"></span>"</span>
 			  <button onclick="getBack()" class="btn btn-default">Volver</button>
 			</div>
 			<div id="DenniedMessage">
-			  <span style="color:red;">M no se encuetra en un estado final, por lo cua M no acepta la cadena "<span id="wrongString"></span>"</span>
+			  <span style="color:red;">M no se encuetra en un estado final, por lo cual M no acepta la cadena "<span id="wrongString"></span>"</span>
 			  <button onclick="getBack()" class="btn btn-default">Volver</button>
 			</div>
         </div>
@@ -102,8 +106,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="js/bootstrap.min.js"></script>
-		<script src="js/cytoscape.min.js"></script>
-		<script src="js/NFA.js"></script>
+		
 		
 		<script type="text/javascript">
 			// Character matching token
@@ -314,7 +317,7 @@
 
 			'use strict';
 
-			const util = require('util');
+			//const util = require('util');
 
 			const n = process.argv[2];
 

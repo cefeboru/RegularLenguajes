@@ -13,7 +13,7 @@
       transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"a" });
       transiciones.push({ origen:"q3" , destino:"q3" , simbolo:"b" });
        */ 
-      function submitData() {
+      function submitDataNFA() {
         var alfa = document.getElementById("regex").value;
         var estados = document.getElementById("regex").value;
         var trans = document.getElementById("regex").value;
@@ -96,9 +96,10 @@
             var estados = document.getElementById("regex").value;
             var arrestados = estados.split("*");
             var alfa = document.getElementById("regex").value;
+
             var arralfa=alfa.split("*");
-            for (var i = transarr.length - 1; i >= 0; i--) {
-              var arr = transarr[i].split("*");
+            for (var i = arralfa.length - 1; i >= 0; i--) {
+              var arr = arralfa[i].split("*");
               result.push(arr[0].trim().substring(1));
               result.push(arr[1].trim());
               result.push(arr[2].trim().substring(0,2));
@@ -427,7 +428,7 @@
 
 			
 			
-			function post2nfa(var postfix){
+			function post2nfa(postfix){
 				var fragmentStack = new Array();
 				var completeNfa = new Fragment();
 				var matchstate = new State();
@@ -462,22 +463,22 @@
 				return completeNfa.getStart();
 			}
 
-			function isLiteral(var c) {
+			function isLiteral(c) {
 				return !isConcatenation(c) && !isAlternation(c) && !isStar(c);
 			}
 
-			function isStar(var c) {
+			function isStar(c) {
 				return c == '*';
 			}
 
-			function isAlternation(var c) {
+			function isAlternation(c) {
 				return c == '|';
 			}
 
-			function isConcatenation(var c) {
+			function isConcatenation(c) {
 				return c == '.';
 			}
-			function appendOutArrows(var a, var b){
+			function appendOutArrows(a,b){
 				var appended = new OwnArrayList ();
 				for (var i = 0; i < a.size(); i++){
 					appended.add(a.get(i));
@@ -487,7 +488,7 @@
 				}
 				return appended;
 			}
-			function patchFragmentToAState(var a, var s){
+			function patchFragmentToAState(a,s){
 				var toBePatched = a.getOutArrows();
 				for (var i = 0; i < toBePatched.size(); i++){
 					var openarrows = toBePatched.get(i);
