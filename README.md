@@ -1,5 +1,5 @@
-Teoria de la Computación
 
-Pagina Principal: Index.html
+# Teoria de la Computación
+<p>Pagina Principal: Index.html</p>
+<p>Libreria para grafos: Cytoscape.js</p>
 
-Libreria para grafos: Cytoscape.js

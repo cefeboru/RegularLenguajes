@@ -154,7 +154,7 @@
       var cy;//Cytoscape CORE
 
      function dibujarDFA() {
-       //INICIALIZACIÓN DE CYTOSCAPE
+       //INICIALIZACIÃ“N DE CYTOSCAPE
        cy = cytoscape({
          container: document.getElementById('cy'),
          
@@ -215,7 +215,7 @@
         { group: "nodes", data: { id: q0 }, position: {x: 145, y: 50}, classes: 'root' }
       ]);
 
-      //CREACIÓN DE NODOS
+      //CREACIÃ“N DE NODOS
       for (var i = Q.length - 1; i >= 0; i--) {
         if(Q[i] !== q0) {
           if( isFinalState(Q[i],F) ) {
@@ -232,7 +232,7 @@
         }
       };
       
-      //CREACIÓN DE TRANSICIONES
+      //CREACIÃ“N DE TRANSICIONES
       for (var i = transiciones.length - 1; i >= 0; i--) {
         var transicionActual = transiciones[i];
         var evaluarTransicion = isDuplicated(transicionActual, transiciones, i);
