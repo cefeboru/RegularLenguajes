@@ -5,7 +5,7 @@
 		<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-		<title>Teoria de la Computación</title>
+		<title>REGEX</title>
 
 		<!-- Main CSS -->
 		 <link href="css/DFA.css" rel="stylesheet">
@@ -13,7 +13,10 @@
 		<!-- Bootstrap -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<script src="js/cytoscape.min.js"></script>
-		<script src="js/NFA.js"></script>
+		<script src="regex_parser.js"></script>
+		<script src="RegexDFA.js"></script>
+		 <script src="js/jquery-1.11.3.js"></script>
+		 <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -74,7 +77,7 @@
 			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo3()">LlenarEjemplo3</button>
 			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo4()">LlenarEjemplo4</button><br>
 			<button class="btn btn-default" name="agregar" type="image" id="agregar" onclick="Limpiar()" >Limpiar Datos </button>
-			<button class="btn btn-default" type="submit" id="bDibujar" onclick="submitDataNFA();">Dibujar NFA</button>
+			<button class="btn btn-default" type="submit" id="regex-submit" >Dibujar DFA</button>
 		</div>
 		
 		<div>
@@ -108,243 +111,7 @@
 		<script src="js/bootstrap.min.js"></script>
 		
 		
-		<script type="text/javascript">
-			// Character matching token
-			function CharacterToken(c) {
-				this.c = c;
-			}
-
-			// Operator token for representing things like ?
-			function OperatorToken(op) {
-				this.op = op;
-			}
-
-			// A special concatenation token
-			function ConcatenationToken() {
-			}
-
-			function convertToPostfix(re) {
-				const outputQueue = [];
-
-				// Convert a?a?aa into postfix notation
-				//
-				//        a
-				//        a?
-				//        a?a
-				//        a?a?
-				//        a?a?.a
-				// Final: a?a?.a.a.
-
-				let outstandingCharacterToken = 0;
-
-				for (let i = 0; i < re.length; i++) {
-					const c = re[i];
-					switch (c) {
-						case '?':
-							// There should be an outstanding character token to apply this
-							// to
-							if (outstandingCharacterToken === 0) {
-								throw new Error('Invalid regular expression.');
-							}
-							outputQueue.push(new OperatorToken(c));
-							break;
-
-						default:
-							if (outstandingCharacterToken > 1) {
-								outstandingCharacterToken--;
-								outputQueue.push(new ConcatenationToken());
-							}
-							outputQueue.push(new CharacterToken(c));
-							outstandingCharacterToken++;
-							break;
-					}
-				}
-
-				while (--outstandingCharacterToken > 0) {
-					outputQueue.push(new ConcatenationToken());
-				}
-
-				return outputQueue;
-			}
-
-			function MatchState() {
-			}
-
-			function SplitState(outArrow1) {
-				this.outArrows = [outArrow1, null];
-			}
-
-			function State(c) {
-				this.c = c;
-				this.outArrows = [null];
-			}
-
-			// Represents a combined but still incomplete NFA
-			function Fragment(startState, incompleteOutArrows) {
-				this.startState = startState;
-				this.incompleteOutArrows = incompleteOutArrows;
-			}
-
-			// Represent one incomplete arrow coming out from the fragment
-			function IncompleteArrow(state, arrowIndex) {
-				this.state = state;
-				this.arrowIndex = arrowIndex;
-			}
-
-			function connectArrowsToState(incompleteOutArrows, state) {
-				while (incompleteOutArrows.length) {
-					const incompleteArrow = incompleteOutArrows.pop();
-					const arrowIndex = incompleteArrow.arrowIndex;
-					incompleteArrow.state.outArrows[arrowIndex] = state;
-				}
-			}
-
-			// Postfix tokens: a?a?.a.a.
-			function convertToNFA(tokens) {
-				const stack = [];
-
-				tokens.forEach(token => {
-
-					if (token instanceof ConcatenationToken) {
-						// Incomplete NFA:
-						//
-						// >prevFragment1--->prevFragment2--->
-						//
-						const prevFragment2 = stack.pop();
-						const prevFragment1 = stack.pop();
-						connectArrowsToState(prevFragment1.incompleteOutArrows, prevFragment2.startState);
-						const newFragment = new Fragment(prevFragment1.startState, prevFragment2.incompleteOutArrows);
-						stack.push(newFragment);
-					}
-					else if (token instanceof OperatorToken && token.op === '?') {
-						// Incomplete NFA:
-						//  |->prevFragment->
-						// >O
-						//  |--------------->
-						const prevFragment = stack.pop();
-
-						// Construct a new fragment with out arrow #1 pointing to the
-						// previous fragment's state
-						const state = new SplitState(prevFragment.startState);
-						const incompleteArrows = prevFragment.incompleteOutArrows;
-						incompleteArrows.push(new IncompleteArrow(state, 1));
-						const newFragment = new Fragment(state, incompleteArrows);
-						stack.push(newFragment);
-					}
-					else if (token instanceof CharacterToken) {
-						// Incomplete NFA:
-						//
-						// >O---->
-						//
-						const state = new State(token.c);
-						const incompleteArrows = [
-							new IncompleteArrow(state, 0)
-						];
-						const newFragment = new Fragment(state, incompleteArrows);
-						stack.push(newFragment);
-					}
-				});
-
-				const fragment = stack.pop();
-				const matchState = new MatchState();
-				connectArrowsToState(fragment.incompleteOutArrows, matchState);
-				return fragment.startState;
-			}
-			
-			function hasMatchState(states) {
-				for (let i = 0; i < states.length; i++) {
-					if (states[i] instanceof MatchState) {
-						return true;
-					}
-				}
-				return false;
-			}
-
-			function addState(statesList, state) {
-				if (statesList.indexOf(state) >= 0) {
-					return;
-				}
-
-				if (state instanceof SplitState) {
-					addState(statesList, state.outArrows[0]);
-					addState(statesList, state.outArrows[1]);
-					return;
-				}
-
-				statesList.push(state);
-			}
-
-			function step(currentStates, character) {
-				// Set of states the NFA will be in after processing the current character
-				let nextStates = [];
-
-				currentStates.forEach(state => {
-					if (state instanceof State &&
-						state.c === character) {
-
-						addState(nextStates, state.outArrows[0]);
-					}
-				});
-
-				return nextStates;
-			}
-
-			// Run NFA (with provided starting state) to determine whether it matches source
-			function nfaMatches(state, inputText) {
-				// Set of states the NFA is currently in
-				let currentStates = [];
-				addState(currentStates, state);
-
-				for (let i = 0; i < inputText.length; i++) {
-					const c = inputText[i];
-					currentStates = step(currentStates, c);
-				}
-
-				// If after processing all the input text, we arrive at the MatchState then
-				// it's a match!
-				return hasMatchState(currentStates);
-			}
-
-			function RegularExpression(regEx) {
-				this.regEx = regEx;
-			}
-
-			RegularExpression.prototype.test = function(source) {
-				const tokens = convertToPostfix(this.regEx);
-				const startState = convertToNFA(tokens);
-				return nfaMatches(startState, source);
-			};
-
-			'use strict';
-
-			//const util = require('util');
-
-			const n = process.argv[2];
-
-			let source = '';
-			let regEx = '';
-			for (let i = 0; i < n; i++) {
-				source += 'a';
-				regEx += 'a?';
-			}
-			regEx += source;
-
-			const re = new RegularExpression(regEx);
-
-			const match = re.test(source);
-			if (match) {
-				//console.log('matches');
-				console.log(document.getElementById( 'regex' ));
-			}
-			else {
-				//console.log("doesn't match");
-				console.log(document.getElementById( "doesn't regex "));
-			}
-			//console.log(document.getElementById( 'blah' ));
-		</script>
-		
-		
-		<script type="text/javascript">
+		<script>
 			function Convertir()
 			{
 				var cy = cytoscape({
@@ -361,9 +128,7 @@
 				]);
 				
 				cy.remove( eles )
-			}
-			
-			
+			}		
 			
 		</script>
 		
@@ -434,13 +199,115 @@
 				 document.randform.randomfield.value = randomstring;
 			}*/
 		</script>   
-		<script type="text/javascript">
+		<script>
 			function Limpiar()
 			{
 				document.getElementById("regex").value="";
 				document.getElementById("cadena").value="";
 				//document.getElementById("resultado").value="";
 			}
+
+	document.addEventListener('DOMContentLoaded', function(){
+		var regex = "";
+		  var dfa;
+		  var alphabet = "abcdefghijklmnopqrstuvwxyz"
+		  var str;
+		  var alg;
+		  var nodes;
+		  var edges;
+		  var stateId;
+		  var audio = true;
+		  var inputPad = $('body').width() / 9;
+		  var c = 0;
+		  var inputPadding = "";
+		  var pause = false;
+		  var started = false;
+		  var running = false;
+		  var completed = false;
+		  var constructing = false;
+
+		$('#regex-submit').on('click', function (e) {
+		    regex = $('#regex-input').val();
+		    clear();
+		    dfa = Regex.parse(regex);
+		    if ((typeof dfa) === "string") {
+		      var error = dfa;
+		      setTimeout(function () {
+		        $('#syntax-error').text("Syntax Error: " + error);
+		        $('#syntax-error').css("opacity", .95);
+		        $('#syntax-error').show();
+		      }, 0)
+		      return;
+		    };
+		    alg = dfa.algebraify();
+		    nodes = alg.cyNodes();
+		    edges = alg.cyEdges();
+		    // dfa.cyNodes().forEach(function (node) {
+		    //   cy.add(node);
+		    // });
+		    // dfa.cyEdges().forEach(function (edge) {
+		    //   cy.add(edge);
+		    // })
+
+		    setDFA(dfa);
+
+		  });
+
+		function setDFA(dfa) {
+
+		    $('.glyphicon-pause').addClass("glyphicon-play");
+		    $('.glyphicon-pause').removeClass("glyphicon-pause");
+		    started = false;
+		    pause = false;
+		    $('body').addClass('fresh');
+		    $('#regex-input').removeClass('rerender');
+		    $('.read').text("");
+		    $('.current').text("");
+		    $('.exp').text(regex);
+		    $('#regex-input').val(regex)
+		    $('#alphabet').val("");
+		    cy.elements().remove();
+		    constructing = false;
+
+
+		  nodes.forEach(function (node) {
+		    node.group = 'nodes'
+		    cy.add(node);
+		  });
+		  edges.forEach(function (edge) {
+		    edge.group = 'edges';
+		    cy.add(edge);
+		  });
+
+		  cy.elements('node#0').addClass('source');
+
+		  var layout = cy.makeLayout({
+		        name: 'concentric',
+		        fit: true,
+		        padding: 20,
+		        minNodeSpacing: 100,
+		        animate: true,
+		        startAngle: 0,
+		        concentric: function (node) {
+		          var root = node.degree();
+
+		          return root
+		        }
+		      });
+
+		      layout.run();
+		      stateId = dfa.getStates().length;
+ 		};
+
+ 		function clear() {
+   			cy.remove(cy.elements());
+   			 $('#regex-input').val("");
+    		$('#str-input').val("");
+    		$('#str-input').css('background-color', '#DBE667')
+    		// "#DEF2AC"
+   			 stateId = 0;
+  		}
+
 		</script>
 		
 		
