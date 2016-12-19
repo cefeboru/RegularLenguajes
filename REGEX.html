@@ -62,19 +62,16 @@
 			<label for="cadena">Cadena:</label>
 			<input id="cadena" class="form-control" type="text" /><br><br>
 		</div>
-		<div>
-			<label for="conversion">Conversion:</label>
-			<input id="conversion" class="form-control" type="text" /><br><br>
-		</div>
+		
 		<div>
 			<button class="btn btn-default" type="submit" onclick="verificar_regex()">Verificar</button>
-			<button class="btn btn-default" type="submit" onclick="Convertir()">Convertir</button>
+			<button class="btn btn-default" type="submit" onclick="RegularExpression(\'' + regEx + '\')">Convertir</button>
 			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo()">LlenarEjemplo1</button>
 			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo2()">LlenarEjemplo2</button>
 			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo3()">LlenarEjemplo3</button>
 			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo4()">LlenarEjemplo4</button><br>
 			<button class="btn btn-default" name="agregar" type="image" id="agregar" onclick="Limpiar()" >Limpiar Datos </button>
-			<button class="btn btn-default" type="submit" id="bDibujar" onclick="submitData();">Dibujar DFA</button>
+			<button class="btn btn-default" type="submit" id="bDibujar" onclick="submitData();">Dibujar NFA</button>
 		</div>
 		
 		<div>
@@ -334,11 +331,14 @@
 
 			const match = re.test(source);
 			if (match) {
-				console.log('matches');
+				//console.log('matches');
+				console.log(document.getElementById( 'regex' ));
 			}
 			else {
-				console.log("doesn't match");
+				//console.log("doesn't match");
+				console.log(document.getElementById( "doesn't regex "));
 			}
+			//console.log(document.getElementById( 'blah' ));
 		</script>
 		
 		
