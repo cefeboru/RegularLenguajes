@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+		<title>REGEX</title>
+
+		<!-- Main CSS -->
+		 <link href="css/DFA.css" rel="stylesheet">
+		<!--link href="css/REGEX.css" rel="stylesheet">
+		<!-- Bootstrap -->
+		 <script src="js/jquery-1.11.3.js"></script>
+		 <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<script src="js/cytoscape.min.js"></script>
+		<script src="js/state.js"></script>
+		<script src="js/util.js"></script>
+		<script src="js/RegexDFA.js"></script>	
+		<script src="js/nfa.js"></script>	
+		<script src="js/machine_derivative.js"></script>
+		<script src="js/faar.js"></script>
+		<script src="js/regex.js"></script>
+		<script src="js/regex_parser.js"></script>			
+		<script src="js/cy.js"></script>
+		
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+
+	<body>
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <div class="navbar-header">
+		      <a class="navbar-brand" href="#">Teoria de la Computacion</a>
+		    </div>
+		    <ul class="nav navbar-nav">
+		      <li ><a href="./index.html">Menu</a></li>
+		      <li><a href="./DFA.html">DFA</a></li>
+		      <li><a href="./NFA.html">NFA</a></li>
+		      <li class="active"><a href="./REGEX.html">REGEX</a></li>
+		      <li><a href="./PDA.html">PDA</a></li> 
+		      <li><a href="./TM.html">TM</a></li>
+		    </ul>
+		  </div>
+		</nav>
+		<div class="container">
+		<div class="headerContainer">
+		  <h1 align="center">Expresiones Regulares</h1>
+		  <p>En el área de la programación las <strong>expresiones regulares</strong> son un método por medio del cual se pueden realizar búsquedas dentro de cadenas de caracteres. Sin importar la amplitud de la búsqueda requerida de un patrón definido de caracteres, las expresiones regulares proporcionan una solución práctica al problema. Adicionalmente, un uso derivado de la búsqueda de patrones es la validación de un formato específico en una cadena de caracteres dada, como por ejemplo fechas o identificadores.</p>
+		  <h2>Definición formal</h2>
+		  <p>R es una expresion regular si R:</p>
+		  <ul>
+			<li><strong>a</strong> para a&isin;&Sigma;</li>
+			<li><strong>E</strong> </li>
+			<li>&#216;</li>
+			<li>R<sub>1</sub> U R<sub>2</sub> | R<sub>1</sub>^R<sub>2</sub> son expr.reg.</li>
+			<li>R<sub>1</sub> o R<sub>2</sub> | R<sub>1</sub>^R<sub>2</sub> son expr.reg.</li>
+			<li>R<sub>1</sub> | R<sub>1</sub> es expr.reg.</li>
+		  </ul>
+		</div>
+		
+		<div>
+		 <label>Escriba expresiones regulares, ejemplo: a+b*, a*b*, a*b*bbc, [a|b]</label><br>
+			<label for="regex">Regex:</label>
+			<input id="regex" class="form-control" type="text" /><br><br>
+		</div>
+		<div>
+			<label for="cadena">Cadena:</label>
+			<input id="cadena" class="form-control" type="text" /><br><br>
+		</div>
+		
+		<div>
+			<button class="btn btn-default" type="submit" onclick="verificar_regex()">Verificar</button>
+			<button class="btn btn-default" type="submit" onclick="RegularExpression(\'' + regEx + '\')">Convertir</button>
+			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo()">LlenarEjemplo1</button>
+			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo2()">LlenarEjemplo2</button>
+			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo3()">LlenarEjemplo3</button>
+			<button class="btn btn-default" type="submit" onclick="LlenarEjemplo4()">LlenarEjemplo4</button><br>
+			<button class="btn btn-default" name="agregar" type="image" id="agregar" onclick="Limpiar()" >Limpiar Datos </button>
+			<button class="btn btn-default" type="submit" id="regex-submit" >Dibujar DFA</button>
+		</div>
+		
+		<div>
+			<label id="resultado"></label>
+		</div>
+		
+		
+		  <div id="cy"></div>
+		  <div class="labelsContainer">
+			<div class="dfaLabel rootNodeLabel"></div><span>Estado Inicial</span>
+			<div class="dfaLabel finalNodeLabel"></div><span>Estado Final</span>
+		  </div>
+		  
+		
+			<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="js/bootstrap.min.js"></script>
+		
+		
+		<script>
+			function Convertir()
+			{
+				var cy = cytoscape({
+				  container: document.getElementById('cy')
+				});
+			
+				var eles = regex.add([
+				  { group: "nodes", data: { id: "a" }, position: { x: 100, y: 100 } },
+				  { group: "nodes", data: { id: "b" }, position: { x: 200, y: 200 } },
+				  { group: "nodes", data: { id: "c" }, position: { x: 300, y: 300 } },
+				  { group: "nodes", data: { id: "d" }, position: { x: 400, y: 400 } },
+				  { group: "edges", data: { id: "e0", source: "a", target: "b" } },
+				  { group: "edges", data: { id: "e1", source: "c", target: "d" } }
+				]);
+				
+				cy.remove( eles )
+			}		
+			
+		</script>
+		
+		<script>
+			function verificar_regex()
+			{
+				var regex = document.getElementById("regex").value;
+				var pattern = new RegExp(regex);
+				var cadena = document.getElementById("cadena").value;
+				
+				var capturedString = pattern.exec(cadena)[0];
+				
+				if(capturedString != null) {
+					if(capturedString.length != cadena.length) {
+						document.getElementById("resultado").innerHTML = "Rechaza";
+					} else {
+						document.getElementById("resultado").innerHTML = "Acepta";
+					}
+				}
+
+			}
+		
+			function LlenarEjemplo() {
+				var input = document.getElementById('regex');
+				input.value = input.value +'a+b*';
+				
+				var input2 = document.getElementById('cadena');
+			    input2.value = input2.value +'abb';
+
+			}
+			function LlenarEjemplo2() {
+				var input = document.getElementById('regex');
+				input.value = input.value +'ab*';
+				
+				var input2 = document.getElementById('cadena');
+			    input2.value = input2.value +'bbbbb';
+
+			}
+			function LlenarEjemplo3() {
+				var input = document.getElementById('regex');
+				input.value = input.value +'a*b*bbc';
+				
+				var input2 = document.getElementById('cadena');
+			    input2.value = input2.value +'bbc';
+
+			}
+			function LlenarEjemplo4() {
+				var input = document.getElementById('regex');
+				input.value = input.value +'[a|b]';
+				
+				var input2 = document.getElementById('cadena');
+			    input2.value = input2.value +'abbbbaa';
+
+			}
+			/*function stringAleatorio()
+			{
+				 var chars = "abc";
+				 var string_length = 4;
+				 var randomstring = document.getElementById("cadena");
+				 
+				 for (var i=0; i<string_length; i++) {
+				  var rnum = Math.floor(Math.random() * chars.length);
+				  randomstring.value += chars.substring(rnum,rnum+1);
+				 }
+				 
+				 document.randform.randomfield.value = randomstring;
+			}*/
+	
+			function Limpiar()
+			{
+				document.getElementById("regex").value="";
+				document.getElementById("cadena").value="";
+				//document.getElementById("resultado").value="";
+			}
+
+	document.addEventListener('DOMContentLoaded', function(){
+		var regex = "";
+		  var dfa;
+		  var alphabet = "abcdefghijklmnopqrstuvwxyz"
+		  var str;
+		  var alg;
+		  var nodes;
+		  var edges;
+		  var stateId;		  
+		  var c = 0;
+		  
+
+		$('#regex-submit').on('click', function (e) {
+		    regex = $('#regex').val();
+		    //clear();
+		    dfa = Regex.parse(regex);
+		    if ((typeof dfa) === "string") {
+		      var error = dfa;
+		      setTimeout(function () {
+		        $('#syntax-error').text("Syntax Error: " + error);
+		        $('#syntax-error').css("opacity", .95);
+		        $('#syntax-error').show();
+		      }, 0)
+		      return;
+		    };
+		    alg = dfa.algebraify();
+		    nodes = alg.cyNodes();
+		    edges = alg.cyEdges();
+		    // dfa.cyNodes().forEach(function (node) {
+		    //   cy.add(node);
+		    // });
+		    // dfa.cyEdges().forEach(function (edge) {
+		    //   cy.add(edge);
+		    // })
+
+		    setDFA(dfa);
+
+		  });
+
+		var cy = cytoscape({
+      container: document.querySelector('#cy'),
+
+      boxSelectionEnabled: false,
+      autounselectify: true,
+
+      style: cytoscape.stylesheet()
+        .selector('node')
+          .css({
+            'content': 'data(name)',
+            'text-valign': 'center',
+            'color': 'white',
+            'text-outline-color': '#888',
+            'background-color': 'data(color)',
+          })
+        .selector('edge')
+          .css({
+            'target-arrow-shape': 'triangle',
+            'content': 'data(name)',
+            'width': 1,
+            'line-color': '#A9B4C4',
+            'target-arrow-color': '#A9B4C4',
+            'curve-style': 'bezier',
+          })
+        .selector(':selected')
+          .css({
+            'background-color': 'black',
+            'line-color': 'black',
+            'target-arrow-color': 'black',
+            'source-arrow-color': 'black'
+          })
+        .selector('.faded')
+          .css({
+            'opacity': 0.25,
+            'text-opacity': 0
+          })
+          .selector('.source')
+            .css({
+              'background-color': '#DBE667',
+              'line-color':  '#DBE667',
+              'target-arrow-color': '#DBE667'
+            })
+            .selector('.focused')
+              .css({
+                'background-color': '#DBE667',
+                'line-color':  '#DBE667',
+                'target-arrow-color': '#DBE667'
+              }),
+
+      elements: {
+        nodes: [],
+        edges: []
+      },
+
+      layout: {
+        name: 'concentric',
+        fit: true,
+        padding: 20,
+        minNodeSpacing: 100,
+        animate: true,
+        startAngle: 0,
+        concentric: function (node) {
+          var root = node.degree();
+          return root
+        }
+      }
+
+  });
+
+		function setDFA(dfa) {
+
+		    $('.glyphicon-pause').addClass("glyphicon-play");
+		    $('.glyphicon-pause').removeClass("glyphicon-pause");
+		    started = false;
+		    pause = false;
+		    $('body').addClass('fresh');
+		    $('#regex-input').removeClass('rerender');
+		    $('.read').text("");
+		    $('.current').text("");
+		    $('.exp').text(regex);
+		    $('#regex-input').val(regex)
+		    $('#alphabet').val("");
+		    cy.elements().remove();
+		    constructing = false;
+
+
+		  nodes.forEach(function (node) {
+		    node.group = 'nodes'
+		    cy.add(node);
+		  });
+		  edges.forEach(function (edge) {
+		    edge.group = 'edges';
+		    cy.add(edge);
+		  });
+
+		  cy.elements('node#0').addClass('source');
+
+		  var layout = cy.makeLayout({
+		        name: 'concentric',
+		        fit: true,
+		        padding: 20,
+		        minNodeSpacing: 100,
+		        animate: true,
+		        startAngle: 0,
+		        concentric: function (node) {
+		          var root = node.degree();
+
+		          return root
+		        }
+		      });
+
+		      layout.run();
+		      stateId = dfa.getStates().length;
+ 		};
+
+ 		
+  	});
+
+		</script>
+		
+		
+		
+	
+	</body>
+</html>
