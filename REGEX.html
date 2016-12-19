@@ -11,12 +11,20 @@
 		 <link href="css/DFA.css" rel="stylesheet">
 		<!--link href="css/REGEX.css" rel="stylesheet">
 		<!-- Bootstrap -->
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<script src="js/cytoscape.min.js"></script>
-		<script src="regex_parser.js"></script>
-		<script src="RegexDFA.js"></script>
 		 <script src="js/jquery-1.11.3.js"></script>
 		 <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<script src="js/cytoscape.min.js"></script>
+		<script src="js/state.js"></script>
+		<script src="js/util.js"></script>
+		<script src="js/RegexDFA.js"></script>	
+		<script src="js/nfa.js"></script>	
+		<script src="js/machine_derivative.js"></script>
+		<script src="js/faar.js"></script>
+		<script src="js/regex.js"></script>
+		<script src="js/regex_parser.js"></script>			
+		<script src="js/cy.js"></script>
+		
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -84,26 +92,13 @@
 			<label id="resultado"></label>
 		</div>
 		
-		<div class="dfaCanvas">
+		
 		  <div id="cy"></div>
 		  <div class="labelsContainer">
 			<div class="dfaLabel rootNodeLabel"></div><span>Estado Inicial</span>
 			<div class="dfaLabel finalNodeLabel"></div><span>Estado Final</span>
 		  </div>
-		  <div id="procesarCadenaForm">
-			<div class="form-group"><label>Procesar Cadena: </label><input id="inputProcesar" class="form-control" type="text"/></div>
-			<div class="form-group"><button class="btn btn-default" type="submit" id="btnProcesar" onclick="procesarCadena();">Procesar Cadena</button><button onclick="getBackForm()" class="btn btn-default">Volver</button></div>
-		  </div>
-		  <div id="DFA_Results"></div>
-			<div id="AcceptedMessage">
-			  <span style="color:green;">M se encuetra en un estado final, por lo cual M acepta la cadena "<span id="correctString"></span>"</span>
-			  <button onclick="getBack()" class="btn btn-default">Volver</button>
-			</div>
-			<div id="DenniedMessage">
-			  <span style="color:red;">M no se encuetra en un estado final, por lo cual M no acepta la cadena "<span id="wrongString"></span>"</span>
-			  <button onclick="getBack()" class="btn btn-default">Volver</button>
-			</div>
-        </div>
+		  
 		
 			<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -132,7 +127,7 @@
 			
 		</script>
 		
-		<script type="text/javascript">
+		<script>
 			function verificar_regex()
 			{
 				var regex = document.getElementById("regex").value;
@@ -150,9 +145,7 @@
 				}
 
 			}
-		</script>
 		
-		<script type="text/javascript">
 			function LlenarEjemplo() {
 				var input = document.getElementById('regex');
 				input.value = input.value +'a+b*';
@@ -198,8 +191,7 @@
 				 
 				 document.randform.randomfield.value = randomstring;
 			}*/
-		</script>   
-		<script>
+	
 			function Limpiar()
 			{
 				document.getElementById("regex").value="";
@@ -215,20 +207,13 @@
 		  var alg;
 		  var nodes;
 		  var edges;
-		  var stateId;
-		  var audio = true;
-		  var inputPad = $('body').width() / 9;
+		  var stateId;		  
 		  var c = 0;
-		  var inputPadding = "";
-		  var pause = false;
-		  var started = false;
-		  var running = false;
-		  var completed = false;
-		  var constructing = false;
+		  
 
 		$('#regex-submit').on('click', function (e) {
-		    regex = $('#regex-input').val();
-		    clear();
+		    regex = $('#regex').val();
+		    //clear();
 		    dfa = Regex.parse(regex);
 		    if ((typeof dfa) === "string") {
 		      var error = dfa;
@@ -252,6 +237,75 @@
 		    setDFA(dfa);
 
 		  });
+
+		var cy = cytoscape({
+      container: document.querySelector('#cy'),
+
+      boxSelectionEnabled: false,
+      autounselectify: true,
+
+      style: cytoscape.stylesheet()
+        .selector('node')
+          .css({
+            'content': 'data(name)',
+            'text-valign': 'center',
+            'color': 'white',
+            'text-outline-color': '#888',
+            'background-color': 'data(color)',
+          })
+        .selector('edge')
+          .css({
+            'target-arrow-shape': 'triangle',
+            'content': 'data(name)',
+            'width': 1,
+            'line-color': '#A9B4C4',
+            'target-arrow-color': '#A9B4C4',
+            'curve-style': 'bezier',
+          })
+        .selector(':selected')
+          .css({
+            'background-color': 'black',
+            'line-color': 'black',
+            'target-arrow-color': 'black',
+            'source-arrow-color': 'black'
+          })
+        .selector('.faded')
+          .css({
+            'opacity': 0.25,
+            'text-opacity': 0
+          })
+          .selector('.source')
+            .css({
+              'background-color': '#DBE667',
+              'line-color':  '#DBE667',
+              'target-arrow-color': '#DBE667'
+            })
+            .selector('.focused')
+              .css({
+                'background-color': '#DBE667',
+                'line-color':  '#DBE667',
+                'target-arrow-color': '#DBE667'
+              }),
+
+      elements: {
+        nodes: [],
+        edges: []
+      },
+
+      layout: {
+        name: 'concentric',
+        fit: true,
+        padding: 20,
+        minNodeSpacing: 100,
+        animate: true,
+        startAngle: 0,
+        concentric: function (node) {
+          var root = node.degree();
+          return root
+        }
+      }
+
+  });
 
 		function setDFA(dfa) {
 
@@ -299,14 +353,8 @@
 		      stateId = dfa.getStates().length;
  		};
 
- 		function clear() {
-   			cy.remove(cy.elements());
-   			 $('#regex-input').val("");
-    		$('#str-input').val("");
-    		$('#str-input').css('background-color', '#DBE667')
-    		// "#DEF2AC"
-   			 stateId = 0;
-  		}
+ 		
+  	});
 
 		</script>
 		
