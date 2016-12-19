@@ -440,7 +440,7 @@ function showTMDefinition() {
             tm.showOnHTML();
             $(".mainComponents").slideUp();
             $("body").css("overflow", "auto");
-            $("#tmDef").show();
+            $("#tmDefinition").show();
         }
     } else {
         sweetAlert("¡Alerta!", generic_validations.error_message, "warning");
