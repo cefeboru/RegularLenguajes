@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Máquina de Turing</title>
+   <meta charset="UTF-8">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+   <link rel="stylesheet" type="text/css" href="css/mainComponents.css">
+   <link rel="stylesheet" type="text/css" href="sweetalert/dist/sweetalert.css">
+   <link rel="stylesheet" type="text/css" href="css/bootstrap">
+</head>
+<body>
+   <nav class="navbar navbar-default">
+      <div class="container-fluid">
+         <div class="navbar-header">
+            <a class="navbar-brand" href="#">Teoria de la Computacion</a>
+         </div>
+         <ul class="nav navbar-nav">
+            <li><a href="../index.html">Menu</a></li>
+            <li><a href="../DFA.html">DFA</a></li>
+            <li><a href="../NFA.html">NFA</a></li>
+            <li><a href="../REGEX.html">REGEX</a></li>
+            <li><a href="../PDA.html">PDA</a></li> 
+            <li class="active"><a href="tm/TM2.html">TM</a></li> 
+         </ul>
+      </div>
+   </nav>
+   <div class="mainComponents">
+      <div class="row">
+         <div class="col-md-12">
+            <h1>Maquina de Turing</h1>
+            <p>La máquina de Turing modela matemáticamente a una máquina que opera mecánicamente sobre una cinta. En esta cinta hay símbolos que la máquina puede leer y escribir, uno a la vez, usando un cabezal lector/escritor de cinta. </p>
+            <h3>Definición formal</h3>
+            <p>Una máquina de Turing es una 7-Tupla (Q, &Sigma;, &Gamma;, &delta; , q<sub>0</sub> , q<sub>a</sub> , q<sub>r</sub> )  donde  Q, &Sigma; y &Gamma;son conjuntos finitos y: </p>
+            <ul>
+               <li><strong>Q:</strong> es el conjunto de estados.</li>
+               <li><strong>&Sigma;:</strong> es el alfabeto de entrada;</li>
+               <li><strong>&Gamma;:</strong> es el alfabeto del stack. estos seran los del alfabeto de entrada, mas $ y &epsilon;;</li>
+               <li><strong>&delta;:</strong> Q X &Sigma; X &Gamma; &rarr; P( Q X &Gamma; ) es una función de transición</li>
+               <li><strong>q<sub>0</sub>:</strong> &isin; Q</li>
+               <li><strong>q<sub>a</sub>:</strong> es el estado de aceptacion.</li>
+               <li><strong>q<sub>r</sub>:</strong> es el estado de rechazo.</li>
+            </ul>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-md-7 center">
+            <div id="tm_canvas">
+               <canvas id="canvas" width="800" height="600">
+               </canvas>
+            </div>  
+         </div>
+         <div class="col-md-5 center">
+           <h2 style="text-align:left">Simulación: </h2>
+           <div id="inputAnimation">
+            <div style='text-decoration:line-through;'></div>
+         </div> 
+         <div id="tm_inputs">
+            <input type="text" id="input_text" name="input" class="form-control" placeholder="Ingrese una cadena: "><br>
+            <button type="button" id="disable_canvas_button" class="btn btn-success" onclick="disableMouseOverTMCanvas()">Probar cadena</button>
+            <button type="button" name="" id="showTMBtn" class="btn btn-success" onclick="showTMDefinition()">Definición</button>
+            <br><br>
+            <button type="button" name="" id="restoreBackup2" class="btn btn-success" onclick="restoreBackup2()">Ejemplo: L(M) = w#w</button>
+         </div>
+      </div>
+   </div>
+</div>
+<div id="tmDefinition">
+   <button type="button" id="hideTMBtn" class="btn btn-success" onclick="hideTMDefinition()">Cerrar</button>
+   <div class="content">
+      <div class="content-title">
+         <h1 style="color:white">Definición formal</h1>
+      </div>
+      <div>
+         <p style="color:white">M = (Q,&nbsp;&Sigma;,&nbsp;&Gamma;,&nbsp;&Delta;,&nbsp;q<sub>0</sub>,&nbsp;q<sub>a</sub>&nbsp;q<sub>r</sub>&nbsp;)</p>
+         <br>
+         <p class="title-info">
+            Q = &nbsp;
+            <p class="states info"></p>
+            &nbsp;
+         </p>
+         <br>
+         <p class="title-info">
+            &Sigma; = &nbsp;
+            <p class="inputAlphabet info"></p>
+            &nbsp;
+         </p>
+         <br>
+         <p class="title-info">
+            &Gamma; = &nbsp;
+            <p class="tapeAlphabet info"></p>
+            &nbsp;
+         </p>
+         <br>
+         <p class="title-info">&Delta;</p>
+         <br>
+         <table class="transitions table table-condensed" id="transitionTable">
+         </table>
+         <br>
+         <p class="title-info">
+            q<sub>0</sub>&nbsp;=&nbsp;
+            <p class="initialState info"></p>
+         </p>
+         <br>
+         <p class="title-info">
+            q<sub>a</sub>&nbsp;=&nbsp;
+            <p class="acceptState info"></p>
+         </p>
+         <br>
+         <p class="title-info">
+            q<sub>r</sub>&nbsp;=&nbsp;
+            <p class="rejectState info"></p>
+         </p>
+      </div>
+   </div>
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script type="text/javascript" src="src/elements/Link.js"></script>
+<script type="text/javascript" src="js/Node.js"></script>
+<script type="text/javascript" src="src/elements/SelfLink.js"></script>
+<script type="text/javascript" src="src/elements/StartLink.js"></script>
+<script type="text/javascript" src="src/elements/TemporaryLink.js"></script>
+<script type="text/javascript" src="src/elements/Pointer.js"></script>
+<script type="text/javascript" src="js/fmsDesigner.js"></script>
+<script type="text/javascript" src="js/tm.js"></script>
+<script type="text/javascript" src="sweetalert/dist/sweetalert.min.js"></script>
+</body>
+</html>
