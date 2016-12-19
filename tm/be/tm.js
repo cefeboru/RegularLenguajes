@@ -1,8 +1,8 @@
-function TM(nodes, links, user_input) {
+function TM(nodes, links, userInput) {
     this.states = nodes.slice();
     this.transitions = links.slice();
-    this.user_input = user_input;
-    this.tape = "_" + this.user_input + "_";
+    this.userInput = userInput;
+    this.tape = "_" + this.userInput + "_";
 
     this.transitionTable = this.createTransitionTable();
 
@@ -81,13 +81,13 @@ TM.prototype.animateMachine = function() {
     var add_animation = function(state, time, color, radius_size) {
         setTimeout(function() {
             state.animate(color, radius_size);
-        }, 500 * time);
+        }, 400 * time);
     };
 
     var add_text_animation = function(tape, time) {
         setTimeout(function() {
-            $("#input_animation").text(tape);
-        }, 500 * time);
+            $("#inputAnimation").text(tape);
+        }, 400 * time);
     }
 
 

@@ -93,12 +93,12 @@ div#pda_inputs {
     height: 30px;
 }
 
-div#input_animation {
-    position: fixed;
+div#inputAnimation {
     top: 0px;
     right: 0;
     font-size: xx-large;
-    color: 089A62;
+    color: blue;
+    font-family: Arial;
     text-align: -webkit-center;
     display: flex;
     margin-right: 570px;
